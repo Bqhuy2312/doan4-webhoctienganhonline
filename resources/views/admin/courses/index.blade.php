@@ -17,6 +17,7 @@
                 'students_count' => 125,
                 'is_active' => true,
                 'created_at' => Carbon::parse('2025-09-25'),
+                'thumbnail_url' => 'https://i.postimg.cc/pXW3C9Y4/course-thumbnail.jpg',
             ],
             (object) [
                 'id' => 2,
@@ -24,6 +25,7 @@
                 'students_count' => 210,
                 'is_active' => true,
                 'created_at' => Carbon::parse('2025-08-15'),
+                'thumbnail_url' => 'https://i.postimg.cc/pXW3C9Y4/course-thumbnail.jpg',
             ],
             (object) [
                 'id' => 3,
@@ -31,6 +33,7 @@
                 'students_count' => 95,
                 'is_active' => true,
                 'created_at' => Carbon::parse('2025-07-30'),
+                'thumbnail_url' => 'https://i.postimg.cc/pXW3C9Y4/course-thumbnail.jpg',
             ],
             (object) [
                 'id' => 4,
@@ -38,6 +41,7 @@
                 'students_count' => 78,
                 'is_active' => false,
                 'created_at' => Carbon::parse('2025-06-01'),
+                'thumbnail_url' => 'https://i.postimg.cc/pXW3C9Y4/course-thumbnail.jpg',
             ],
             (object) [
                 'id' => 5,
@@ -45,20 +49,22 @@
                 'students_count' => 60,
                 'is_active' => true,
                 'created_at' => Carbon::parse('2024-12-20'),
+                'thumbnail_url' => 'https://i.postimg.cc/pXW3C9Y4/course-thumbnail.jpg',
             ],
         ];
     @endphp
 
     <div class="page-header">
         <h1>Danh sách khóa học</h1>
-        <a href="#" class="add-new-btn"><i class="fa-solid fa-plus"></i> Thêm khóa học</a>
+        <a href="{{ route('admin.courses.create') }}" class="add-new-btn" style="text-decoration: none;"><i
+                class="fa-solid fa-plus"></i> Thêm khóa học</a>
     </div>
 
     <div class="table-container">
         <table class="courses-table">
             <thead>
                 <tr>
-                    <th>Tên khóa học</th>
+                    <th style="width: 40%;">Khóa học</th>
                     <th>Ngày tạo</th>
                     <th>Số học viên</th>
                     <th>Trạng thái</th>
@@ -68,8 +74,12 @@
             <tbody>
                 @forelse ($courses as $course)
                     <tr>
-                        <td class="course-title">
-                            {{ $course->title }}
+                        <td>
+                            <div class="course-info">
+                                <img src="{{ $course->thumbnail_url ?? 'https://via.placeholder.com/130x73' }}"
+                                    alt="{{ $course->title }}" class="course-thumbnail-img">
+                                <span class="course-title">{{ $course->title }}</span>
+                            </div>
                         </td>
                         <td>{{ $course->created_at->format('d/m/Y') }}</td>
                         <td>{{ $course->students_count }}</td>
@@ -82,12 +92,14 @@
                         </td>
                         <td>
                             <div class="action-buttons">
-                                <a href="#" class="action-btn" title="Quản lý nội dung khóa học">
+                                <a href="{{ route('admin.courses.show', $course->id) }}" class="action-btn"
+                                    title="Quản lý nội dung khóa học">
                                     <i class="fa-solid fa-list-check"></i>
                                     <span>Nội dung</span>
                                 </a>
 
-                                <a href="#" class="action-btn" title="Sửa thông tin khóa học">
+                                <a href="{{ route('admin.courses.edit', $course->id) }}" class="action-btn"
+                                    title="Sửa thông tin khóa học">
                                     <i class="fa-solid fa-pencil"></i>
                                     <span>Sửa</span>
                                 </a>

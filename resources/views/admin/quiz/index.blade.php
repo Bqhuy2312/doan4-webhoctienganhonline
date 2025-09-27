@@ -44,15 +44,14 @@
 
     <div class="page-header">
         <h1>Quản lý Quiz</h1>
-        <a href="#" class="add-new-btn"><i class="fa-solid fa-plus"></i> Tạo Quiz mới</a>
+        <a href="#" class="add-new-btn"><i class="fa-solid fa-plus" style="text-decoration: none;"></i> Tạo Quiz mới</a>
     </div>
 
     <div class="table-container">
         <table class="quizzes-table">
             <thead>
                 <tr>
-                    <th>Tên bài Quiz</th>
-                    <th>Thuộc khóa học</th>
+                    <th style="width: 45%;">Bài Quiz</th>
                     <th>Số câu hỏi</th>
                     <th>Ngày tạo</th>
                     <th style="width: 20%;">Hành động</th>
@@ -61,9 +60,12 @@
             <tbody>
                 @forelse ($quizzes as $quiz)
                     <tr>
-                        <td class="quiz-title">{{ $quiz->title }}</td>
                         <td>
-                            <a href="#" class="course-link">{{ $quiz->course->title }}</a>
+                            <div class="quiz-info">
+                                <div class="quiz-title">{{ $quiz->title }}</div>
+                                <a href="{{ route('admin.courses.show', $quiz->course->id) }}"
+                                    class="course-link">{{ $quiz->course->title }}</a>
+                            </div>
                         </td>
                         <td>{{ $quiz->questions_count }}</td>
                         <td>{{ $quiz->created_at->format('d/m/Y') }}</td>
@@ -73,10 +75,12 @@
                                     <i class="fa-solid fa-list-check"></i>
                                     <span>Câu hỏi</span>
                                 </a>
+
                                 <a href="#" class="action-btn" title="Xem kết quả làm bài của học viên">
                                     <i class="fa-solid fa-square-poll-vertical"></i>
                                     <span>Kết quả</span>
                                 </a>
+
                                 <a href="#" class="action-btn" title="Sửa thông tin quiz">
                                     <i class="fa-solid fa-pencil"></i>
                                 </a>
@@ -94,7 +98,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="5" style="text-align: center; padding: 2rem;">Chưa có bài quiz nào.</td>
+                        <td colspan="4" style="text-align: center; padding: 2rem;">Chưa có bài quiz nào.</td>
                     </tr>
                 @endforelse
             </tbody>

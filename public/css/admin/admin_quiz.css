@@ -11,6 +11,7 @@
     padding: 0.6rem 1.2rem;
     border-radius: 6px;
     font-weight: 500;
+    text-decoration: none;
     transition: background-color 0.2s ease;
 }
 
@@ -32,7 +33,7 @@
 
 .quizzes-table th,
 .quizzes-table td {
-    padding: 1rem;
+    padding: 0.75rem 1rem;
     text-align: left;
     border-bottom: 1px solid #dee2e6;
     vertical-align: middle;
@@ -47,16 +48,19 @@
     background-color: #f8f9fa;
 }
 
-.quiz-title {
+.quiz-info .quiz-title {
     font-weight: 500;
+    margin-bottom: 0.25rem;
 }
 
-.course-link {
+.quiz-info .course-link {
+    font-size: 0.9rem;
     color: #6c757d;
     font-style: italic;
+    text-decoration: none;
 }
 
-.course-link:hover {
+.quiz-info .course-link:hover {
     color: #007bff;
     text-decoration: underline;
 }
@@ -78,6 +82,8 @@
     display: inline-flex;
     align-items: center;
     gap: 0.4rem;
+    text-decoration: none;
+    cursor: pointer;
 }
 
 .action-btn:hover {
@@ -90,4 +96,8 @@
     border-color: #dc3545;
     background-color: #dc3545;
     color: #fff;
+}
+
+.action-buttons form {
+    margin: 0;
 }

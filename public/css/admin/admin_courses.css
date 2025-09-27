@@ -32,9 +32,10 @@
 
 .courses-table th,
 .courses-table td {
-    padding: 1rem;
+    padding: 0.75rem 1rem;
     text-align: left;
     border-bottom: 1px solid #dee2e6;
+    vertical-align: middle;
 }
 
 .courses-table thead th {
@@ -44,6 +45,20 @@
 
 .courses-table tbody tr:hover {
     background-color: #f8f9fa;
+}
+
+.course-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.course-thumbnail-img {
+    width: 130px;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    border-radius: 6px;
+    flex-shrink: 0;
 }
 
 .course-title {

@@ -2,17 +2,28 @@
 
 @section('title', 'Dashboard')
 
-<<<<<<< HEAD
-@section('content')
-    <h1>Admin Dashboard</h1>
-    <p>Admin Dashboard</p>
-@endsection
-=======
 @push('styles')
     <link rel="stylesheet" href="{{ asset('css/admin/admin_dashboard.css') }}">
 @endpush
 
 @section('content')
+
+    @php
+        $totalStudents = 1250;
+        $newStudentsThisWeek = 85;
+        $activeCourses = 25;
+
+        $studentsPerCourseData = [
+            'labels' => ['IELTS Foundation', 'TOEIC 500+', 'Giao tiếp cơ bản', 'Tiếng Anh cho IT', 'Ngữ pháp', 'Luyện thi THPT'],
+            'values' => [125, 210, 95, 78, 60, 350]
+        ];
+
+        $completionRateData = [
+            'labels' => ['Đã hoàn thành', 'Đang học', 'Chưa bắt đầu'],
+            'values' => [65, 25, 10]
+        ];
+    @endphp
+
     <div class="dashboard-header">
         <h1>Tổng quan</h1>
     </div>
@@ -104,4 +115,3 @@
         });
     </script>
 @endpush
->>>>>>> 656da06e8fb914054858fa0226b72c25825ce7f4

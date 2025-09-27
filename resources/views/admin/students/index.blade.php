@@ -39,7 +39,7 @@
                         <td>{{ $student->email }}</td>
                         <td>{{ $student->created_at->format('d/m/Y') }}</td>
                         <td>
-                            <a href="#" class="action-btn">Xem chi tiết</a>
+                            <a href="{{ route('admin.students.show', $student->id) }}" class="action-btn" style="text-decoration: none;" title="Xem chi tiết tiến độ của học viên">Xem chi tiết</a>
                         </td>
                     </tr>
                 @empty

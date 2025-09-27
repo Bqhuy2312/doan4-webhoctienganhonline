@@ -20,8 +20,8 @@ Route::post('/forgot-password', function (Request $request) {
     );
 
     return $status === Password::RESET_LINK_SENT
-                ? back()->with(['status' => __($status)])
-                : back()->withErrors(['email' => __($status)]);
+        ? back()->with(['status' => __($status)])
+        : back()->withErrors(['email' => __($status)]);
 })->name('password.email');
 
 // Đăng ký
@@ -44,4 +44,44 @@ Route::prefix('user')->group(function () {
     Route::get('/profile', [UserController::class, 'profile'])->name('user.profile');
     Route::get('/quiz', [UserController::class, 'quiz'])->name('user.quiz');
     Route::get('/chat', [UserController::class, 'chat'])->name('user.chat');
+});
+
+// Nhóm route cho Admin
+Route::prefix('admin')->group(function () {
+    // Auth
+    Route::get('/', function () {
+        return view('admin.auth.login');
+    })->name('admin.auth.login');
+    // Dashboard
+    Route::get('/dashboard', function () {
+        return view('admin.dashboard');
+    })->name('admin.dashboard');
+    // Course
+    Route::get('/courses', function () {
+        return view('admin.courses.index');
+    })->name('admin.courses.index');
+    Route::get('/courses/create', function () {
+        return view('admin.courses.create');
+    })->name('admin.courses.create');
+    Route::get('/courses/{id}', function () {
+        return view('admin.courses.show');
+    })->name('admin.courses.show');
+    Route::get('/courses/{id}/edit', function () {
+        return view('admin.courses.edit');
+    })->name('admin.courses.edit');
+    // Student
+    Route::get('/students', function () {
+        return view('admin.students.index');
+    })->name('admin.students.index');
+    Route::get('/students/{id}', function () {
+        return view('admin.students.show');
+    })->name('admin.students.show');
+    // Quiz
+    Route::get('/quiz', function () {
+        return view('admin.quiz.index');
+    })->name('admin.quiz.index');
+    // Chat
+    Route::get('/chat', function () {
+        return view('admin.chat.index');
+    })->name('admin.chat.index');
 });
