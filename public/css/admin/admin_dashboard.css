@@ -1,0 +1,94 @@
+.dashboard-header {
+    margin-bottom: 2rem;
+}
+
+.stat-cards-container {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 2.5rem;
+}
+
+.stat-card {
+    flex: 1;
+    min-width: 220px;
+    background-color: #ffffff;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.08);
+}
+
+.stat-card .card-icon {
+    font-size: 2.5rem;
+    padding: 1rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card-icon.icon-students {
+    background-color: #e0f7fa;
+    color: #0097a7;
+}
+
+.card-icon.icon-new-students {
+    background-color: #e8f5e9;
+    color: #388e3c;
+}
+
+.card-icon.icon-courses {
+    background-color: #fff3e0;
+    color: #f57c00;
+}
+
+.stat-card .card-info h3 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+.stat-card .card-info p {
+    font-size: 0.9rem;
+    color: #6c757d;
+    margin: 0;
+}
+
+.charts-container {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.chart-wrapper {
+    background-color: #ffffff;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.chart-wrapper.bar-chart {
+    flex: 2;
+    min-width: 300px;
+}
+
+.chart-wrapper.pie-chart {
+    flex: 1;
+    min-width: 300px;
+}
+
+.chart-wrapper h3 {
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+    font-weight: 500;
+    color: #495057;
+}
