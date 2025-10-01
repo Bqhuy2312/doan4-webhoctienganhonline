@@ -24,6 +24,7 @@ class DashboardController extends Controller
                               ->take(6)
                               ->get();
 
+        // 1. Biểu đồ cột: Lấy 6 khóa học có nhiều học viên nhất
         $studentsPerCourseData = [
 
             'labels' => $topCourses->pluck('title'),
@@ -31,7 +32,6 @@ class DashboardController extends Controller
         ];
 
         // 2. Biểu đồ tròn: Tỷ lệ hoàn thành (hiện tại dùng dữ liệu giả)
-        // Logic thực tế cho phần này sẽ phức tạp hơn, cần CSDL để theo dõi tiến độ
         $completionRateData = [
             'labels' => ['Đã hoàn thành', 'Đang học', 'Chưa bắt đầu'],
             'values' => [65, 25, 10]

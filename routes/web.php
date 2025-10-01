@@ -56,13 +56,13 @@ Route::prefix('admin')->group(function () {
 
     Route::middleware(['auth', 'auth'])->group(function () {
 
-        // Đăng xuất
+        // Logout
         Route::post('/logout', [adAuthController::class, 'logout'])->name('admin.auth.logout');
 
         // Dashboard
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 
-        // Course
+        // Courses
         Route::get('/courses', function () {
             return view('admin.courses.index');
         })->name('admin.courses.index');
@@ -76,7 +76,7 @@ Route::prefix('admin')->group(function () {
             return view('admin.courses.edit');
         })->name('admin.courses.edit');
 
-        // Student
+        // Students
         Route::get('/students', function () {
             return view('admin.students.index');
         })->name('admin.students.index');
@@ -84,7 +84,7 @@ Route::prefix('admin')->group(function () {
             return view('admin.students.show');
         })->name('admin.students.show');
 
-        // Quiz (đã sửa lại đường dẫn cho đúng chuẩn)
+        // Quizzes
         Route::get('/quizzes', function () {
             return view('admin.quiz.index');
         })->name('admin.quiz.index');
