@@ -17,7 +17,7 @@
             <h1>Admin Login</h1>
         </div>
         
-        <form action="#" method="POST">
+        <form action="{{route('admin.auth.login.submit')}}" method="POST">
             @csrf
             <div class="form-group">
                 <label for="email">Email</label>

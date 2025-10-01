@@ -5,6 +5,8 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Admin\adAuthController;
+use App\Http\Controllers\Admin\DashboardController;
 
 // Form quên mật khẩu
 Route::get('/forgot-password', function () {
@@ -48,40 +50,60 @@ Route::prefix('user')->group(function () {
 
 // Nhóm route cho Admin
 Route::prefix('admin')->group(function () {
-    // Auth
-    Route::get('/', function () {
-        return view('admin.auth.login');
-    })->name('admin.auth.login');
-    // Dashboard
-    Route::get('/dashboard', function () {
-        return view('admin.dashboard');
-    })->name('admin.dashboard');
-    // Course
-    Route::get('/courses', function () {
-        return view('admin.courses.index');
-    })->name('admin.courses.index');
-    Route::get('/courses/create', function () {
-        return view('admin.courses.create');
-    })->name('admin.courses.create');
-    Route::get('/courses/{id}', function () {
-        return view('admin.courses.show');
-    })->name('admin.courses.show');
-    Route::get('/courses/{id}/edit', function () {
-        return view('admin.courses.edit');
-    })->name('admin.courses.edit');
-    // Student
-    Route::get('/students', function () {
-        return view('admin.students.index');
-    })->name('admin.students.index');
-    Route::get('/students/{id}', function () {
-        return view('admin.students.show');
-    })->name('admin.students.show');
-    // Quiz
-    Route::get('/quiz', function () {
-        return view('admin.quiz.index');
-    })->name('admin.quiz.index');
-    // Chat
-    Route::get('/chat', function () {
-        return view('admin.chat.index');
-    })->name('admin.chat.index');
+
+    Route::get('/', [adAuthController::class, 'showLoginForm'])->name('admin.login');
+    Route::post('/login', [adAuthController::class, 'login'])->name('admin.auth.login.submit');
+
+    Route::middleware(['auth', 'auth'])->group(function () {
+
+        // Đăng xuất
+        Route::post('/logout', [adAuthController::class, 'logout'])->name('admin.auth.logout');
+
+        // Dashboard
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+
+        // Course
+        Route::get('/courses', function () {
+            return view('admin.courses.index');
+        })->name('admin.courses.index');
+        Route::get('/courses/create', function () {
+            return view('admin.courses.create');
+        })->name('admin.courses.create');
+        Route::get('/courses/{id}', function () {
+            return view('admin.courses.show');
+        })->name('admin.courses.show');
+        Route::get('/courses/{id}/edit', function () {
+            return view('admin.courses.edit');
+        })->name('admin.courses.edit');
+
+        // Student
+        Route::get('/students', function () {
+            return view('admin.students.index');
+        })->name('admin.students.index');
+        Route::get('/students/{id}', function () {
+            return view('admin.students.show');
+        })->name('admin.students.show');
+
+        // Quiz (đã sửa lại đường dẫn cho đúng chuẩn)
+        Route::get('/quizzes', function () {
+            return view('admin.quiz.index');
+        })->name('admin.quiz.index');
+        Route::get('/quizzes/create', function () {
+            return view('admin.quiz.create');
+        })->name('admin.quiz.create');
+        Route::get('/quizzes/{id}/edit', function () {
+            return view('admin.quiz.edit');
+        })->name('admin.quiz.edit');
+        Route::get('/quizzes/{id}/questions', function () {
+            return view('admin.quiz.question');
+        })->name('admin.quiz.question');
+        Route::get('/quizzes/{id}/results', function () {
+            return view('admin.quiz.result');
+        })->name('admin.quiz.result');
+
+        // Chat
+        Route::get('/chat', function () {
+            return view('admin.chat.index');
+        })->name('admin.chat.index');
+    });
 });

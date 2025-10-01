@@ -1,0 +1,48 @@
+    .page-header h1 {
+        margin-bottom: 0.5rem;
+    }
+
+    .quiz-subtitle {
+        font-size: 1.2rem;
+        color: #6c757d;
+        font-weight: 400;
+        margin-bottom: 1.5rem;
+    }
+
+    .table-container {
+        background-color: #fff;
+        padding: 1.5rem;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    }
+
+    .results-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .results-table th,
+    .results-table td {
+        padding: 1rem;
+        text-align: left;
+        border-bottom: 1px solid #dee2e6;
+        vertical-align: middle;
+    }
+
+    .results-table thead th {
+        font-weight: 600;
+        color: #495057;
+    }
+
+    .results-table tbody tr:hover {
+        background-color: #f8f9fa;
+    }
+
+    .student-name {
+        font-weight: 500;
+    }
+
+    .score {
+        font-weight: bold;
+        color: #007bff;
+    }

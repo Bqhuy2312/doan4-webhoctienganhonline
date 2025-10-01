@@ -44,7 +44,7 @@
 
     <div class="page-header">
         <h1>Quản lý Quiz</h1>
-        <a href="#" class="add-new-btn"><i class="fa-solid fa-plus" style="text-decoration: none;"></i> Tạo Quiz mới</a>
+        <a href="{{ route('admin.quiz.create') }}" class="add-new-btn"><i class="fa-solid fa-plus" style="text-decoration: none;"></i> Tạo Quiz mới</a>
     </div>
 
     <div class="table-container">
@@ -71,17 +71,17 @@
                         <td>{{ $quiz->created_at->format('d/m/Y') }}</td>
                         <td>
                             <div class="action-buttons">
-                                <a href="#" class="action-btn" title="Quản lý các câu hỏi của quiz này">
+                                <a href="{{ route('admin.quiz.question', $quiz->id) }}" class="action-btn" title="Quản lý các câu hỏi của quiz này">
                                     <i class="fa-solid fa-list-check"></i>
                                     <span>Câu hỏi</span>
                                 </a>
 
-                                <a href="#" class="action-btn" title="Xem kết quả làm bài của học viên">
+                                <a href="{{ route('admin.quiz.result', $quiz->id) }}" class="action-btn" title="Xem kết quả làm bài của học viên">
                                     <i class="fa-solid fa-square-poll-vertical"></i>
                                     <span>Kết quả</span>
                                 </a>
 
-                                <a href="#" class="action-btn" title="Sửa thông tin quiz">
+                                <a href="{{ route('admin.quiz.edit', $quiz->id) }}" class="action-btn" title="Sửa thông tin quiz">
                                     <i class="fa-solid fa-pencil"></i>
                                 </a>
 
