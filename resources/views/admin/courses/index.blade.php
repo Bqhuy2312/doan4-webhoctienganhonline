@@ -8,52 +8,6 @@
 
 @section('content')
 
-    @php
-        use Carbon\Carbon;
-        $courses = [
-            (object) [
-                'id' => 1,
-                'title' => 'IELTS Foundation - Xây dựng nền tảng vững chắc',
-                'students_count' => 125,
-                'is_active' => true,
-                'created_at' => Carbon::parse('2025-09-25'),
-                'thumbnail_url' => 'https://i.postimg.cc/pXW3C9Y4/course-thumbnail.jpg',
-            ],
-            (object) [
-                'id' => 2,
-                'title' => 'TOEIC 500+ Cấp tốc trong 3 tháng',
-                'students_count' => 210,
-                'is_active' => true,
-                'created_at' => Carbon::parse('2025-08-15'),
-                'thumbnail_url' => 'https://i.postimg.cc/pXW3C9Y4/course-thumbnail.jpg',
-            ],
-            (object) [
-                'id' => 3,
-                'title' => 'Giao tiếp cơ bản cho người mất gốc',
-                'students_count' => 95,
-                'is_active' => true,
-                'created_at' => Carbon::parse('2025-07-30'),
-                'thumbnail_url' => 'https://i.postimg.cc/pXW3C9Y4/course-thumbnail.jpg',
-            ],
-            (object) [
-                'id' => 4,
-                'title' => 'Tiếng Anh chuyên ngành Công nghệ thông tin',
-                'students_count' => 78,
-                'is_active' => false,
-                'created_at' => Carbon::parse('2025-06-01'),
-                'thumbnail_url' => 'https://i.postimg.cc/pXW3C9Y4/course-thumbnail.jpg',
-            ],
-            (object) [
-                'id' => 5,
-                'title' => 'Ngữ pháp tiếng Anh nâng cao toàn tập',
-                'students_count' => 60,
-                'is_active' => true,
-                'created_at' => Carbon::parse('2024-12-20'),
-                'thumbnail_url' => 'https://i.postimg.cc/pXW3C9Y4/course-thumbnail.jpg',
-            ],
-        ];
-    @endphp
-
     <div class="page-header">
         <h1>Danh sách khóa học</h1>
         <a href="{{ route('admin.courses.create') }}" class="add-new-btn" style="text-decoration: none;"><i
@@ -76,8 +30,8 @@
                     <tr>
                         <td>
                             <div class="course-info">
-                                <img src="{{ $course->thumbnail_url ?? 'https://via.placeholder.com/130x73' }}"
-                                    alt="{{ $course->title }}" class="course-thumbnail-img">
+                                <img src="{{ asset('storage/' . $course->thumbnail_url) }}" alt="{{ $course->title }}"
+                                    class="course-thumbnail-img">
                                 <span class="course-title">{{ $course->title }}</span>
                             </div>
                         </td>
@@ -104,7 +58,7 @@
                                     <span>Sửa</span>
                                 </a>
 
-                                <form action="#" method="POST"
+                                <form action="{{ route('admin.courses.destroy', $course->id) }}" method="POST"
                                     onsubmit="return confirm('Bạn có chắc chắn muốn xóa khóa học này không?');"
                                     style="margin: 0;">
                                     @csrf
@@ -127,5 +81,6 @@
     </div>
 
     <div class="pagination-container" style="margin-top: 1.5rem;">
+        {{ $courses->links() }}
     </div>
 @endsection

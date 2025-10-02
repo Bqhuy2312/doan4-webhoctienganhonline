@@ -8,7 +8,7 @@
 
 @section('content')
 
-    @php
+    {{-- @php
         $totalStudents = 1250;
         $newStudentsThisWeek = 85;
         $activeCourses = 25;
@@ -22,7 +22,7 @@
             'labels' => ['Đã hoàn thành', 'Đang học', 'Chưa bắt đầu'],
             'values' => [65, 25, 10]
         ];
-    @endphp
+    @endphp --}}
 
     <div class="dashboard-header">
         <h1>Tổng quan</h1>

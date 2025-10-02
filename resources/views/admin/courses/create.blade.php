@@ -11,7 +11,7 @@
         <h1>Tạo khóa học mới</h1>
     </div>
 
-    <form action="#" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('admin.courses.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="form-container">
             <div class="main-form">
@@ -56,7 +56,7 @@
                         </select>
                     </div>
                     <div class="form-actions">
-                        <button type="button" class="btn btn-secondary">Hủy</button>
+                        <a href="{{ route('admin.courses.index') }}" class="btn btn-secondary">Hủy</a>
                         <button type="submit" class="btn btn-primary">Lưu khóa học</button>
                     </div>
                 </div>

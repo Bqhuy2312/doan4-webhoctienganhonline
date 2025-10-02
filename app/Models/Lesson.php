@@ -63,4 +63,9 @@ class Lesson extends Model
 					->withPivot('id', 'completed_at')
 					->withTimestamps();
 	}
+
+	public function section()
+	{
+		return $this->belongsTo(Section::class);
+	}
 }

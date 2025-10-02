@@ -9,23 +9,24 @@
 
 @section('content')
 
-    @php
-        $course = (object) [
-            'id' => 1,
-            'title' => 'IELTS Foundation - Xây dựng nền tảng vững chắc',
-            'description' => 'Khóa học này được thiết kế để cung cấp cho học viên những kiến thức nền tảng nhất về kỳ thi IELTS, bao gồm cấu trúc bài thi, các dạng câu hỏi thường gặp và chiến lược làm bài cơ bản cho cả 4 kỹ năng: Nghe, Nói, Đọc, Viết.',
-            'thumbnail_url' => 'https://i.postimg.cc/pXW3C9Y4/course-thumbnail.jpg',
-            'price' => 599000,
-            'student_limit' => 50,
-            'is_active' => true,
-        ];
-    @endphp
+    {{-- @php
+    $course = (object) [
+    'id' => 1,
+    'title' => 'IELTS Foundation - Xây dựng nền tảng vững chắc',
+    'description' => 'Khóa học này được thiết kế để cung cấp cho học viên những kiến thức nền tảng nhất về kỳ thi IELTS, bao
+    gồm cấu trúc bài thi, các dạng câu hỏi thường gặp và chiến lược làm bài cơ bản cho cả 4 kỹ năng: Nghe, Nói, Đọc, Viết.',
+    'thumbnail_url' => 'https://i.postimg.cc/pXW3C9Y4/course-thumbnail.jpg',
+    'price' => 599000,
+    'student_limit' => 50,
+    'is_active' => true,
+    ];
+    @endphp --}}
 
     <div class="page-header">
         <h1>Chỉnh sửa khóa học</h1>
     </div>
 
-    <form action="#" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('admin.courses.update', $course->id) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
 
@@ -46,7 +47,8 @@
                     <label>Ảnh bìa khóa học</label>
                     <div class="current-image-preview">
                         <p style="margin-bottom: 0.5rem; font-size: 0.9rem; color: #6c757d;">Ảnh hiện tại:</p>
-                        <img src="{{ $course->thumbnail_url }}" alt="Ảnh bìa khóa học">
+                        <img src="{{ asset('storage/' . $course->thumbnail_url) }}" alt="{{ $course->title }}"
+                            class="course-thumbnail-img">
                     </div>
                     <hr style="margin: 1.5rem 0;">
                     <div class="image-upload-box" onclick="document.getElementById('thumbnail').click();">
@@ -78,7 +80,7 @@
                         </select>
                     </div>
                     <div class="form-actions">
-                        <a href="#" class="btn btn-secondary">Hủy</a>
+                        <a href="{{ route('admin.courses.index') }}" class="btn btn-secondary">Hủy</a>
                         <button type="submit" class="btn btn-primary">Cập nhật</button>
                     </div>
                 </div>

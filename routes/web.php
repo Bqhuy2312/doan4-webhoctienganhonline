@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Password;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Admin\adAuthController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\CourseController;
+use App\Http\Controllers\Admin\LessonController;
 
 // Form quên mật khẩu
 Route::get('/forgot-password', function () {
@@ -63,18 +65,11 @@ Route::prefix('admin')->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 
         // Courses
-        Route::get('/courses', function () {
-            return view('admin.courses.index');
-        })->name('admin.courses.index');
-        Route::get('/courses/create', function () {
-            return view('admin.courses.create');
-        })->name('admin.courses.create');
-        Route::get('/courses/{id}', function () {
-            return view('admin.courses.show');
-        })->name('admin.courses.show');
-        Route::get('/courses/{id}/edit', function () {
-            return view('admin.courses.edit');
-        })->name('admin.courses.edit');
+        Route::resource('courses', CourseController::class)->names('admin.courses');
+
+        // Lessons
+        Route::post('/courses/{course}/lessons', [LessonController::class, 'store'])->name('admin.lessons.store');
+        Route::delete('/lessons/{lesson}', [LessonController::class, 'destroy'])->name('admin.lessons.destroy');
 
         // Students
         Route::get('/students', function () {
