@@ -9,6 +9,8 @@ use App\Http\Controllers\Admin\adAuthController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\CourseController;
 use App\Http\Controllers\Admin\LessonController;
+use App\Http\Controllers\Admin\SectionController;
+use App\Http\Controllers\Admin\CategoryController;
 
 // Form quên mật khẩu
 Route::get('/forgot-password', function () {
@@ -64,11 +66,21 @@ Route::prefix('admin')->group(function () {
         // Dashboard
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 
+        // Categories
+        Route::resource('categories', CategoryController::class)->names('admin.categories')->except(['show', 'create', 'edit']);
+
         // Courses
         Route::resource('courses', CourseController::class)->names('admin.courses');
 
+        // Sections
+        Route::post('/courses/{course}/sections', [SectionController::class, 'store'])->name('admin.courses.sections.store');
+        Route::put('/sections/{section}', [SectionController::class, 'update'])->name('admin.sections.update');
+        Route::delete('/sections/{section}', [SectionController::class, 'destroy'])->name('admin.sections.destroy');
+
         // Lessons
         Route::post('/courses/{course}/lessons', [LessonController::class, 'store'])->name('admin.lessons.store');
+        Route::put('/lessons/{lesson}', [LessonController::class, 'update'])->name('admin.lessons.update');
+        Route::delete('/lessons/{lesson}', [LessonController::class, 'destroy'])->name('admin.lessons.destroy');
         Route::delete('/lessons/{lesson}', [LessonController::class, 'destroy'])->name('admin.lessons.destroy');
 
         // Students

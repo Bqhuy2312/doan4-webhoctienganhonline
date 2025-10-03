@@ -32,6 +32,14 @@
                 <li class="nav-header">QUẢN LÝ</li>
 
                 <li class="nav-item">
+                    <a href="{{ route('admin.categories.index') }}"
+                        class="nav-link {{ request()->routeIs('admin.categories.*') ? 'active' : '' }}">
+                        <i class="fa-solid fa-list"></i>
+                        <p>Quản lý danh mục</p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
                     <a href="{{ route('admin.courses.index') }}"
                         class="nav-link {{ request()->routeIs('admin.courses.*') ? 'active' : '' }}">
                         <i class="fa-solid fa-book"></i>

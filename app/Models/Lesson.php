@@ -44,7 +44,8 @@ class Lesson extends Model
 		'type',
 		'video_url',
 		'pdf_path',
-		'quiz_id'
+		'quiz_id',
+		'section_id'
 	];
 
 	public function course()

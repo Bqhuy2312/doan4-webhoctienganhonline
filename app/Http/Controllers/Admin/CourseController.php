@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Course;
+use App\Models\Category;
 
 class CourseController extends Controller
 {
@@ -16,7 +17,8 @@ class CourseController extends Controller
 
     public function create()
     {
-        return view('admin.courses.create');
+        $categories = Category::all();
+        return view('admin.courses.create', compact('categories'));
     }
 
     public function store(Request $request)
@@ -28,6 +30,7 @@ class CourseController extends Controller
             'price' => 'required|numeric|min:0',
             'student_limit' => 'nullable|numeric|min:1',
             'status' => 'required|boolean',
+            'category_id' => 'nullable|exists:categories,id'
         ]);
 
         if ($request->hasFile('thumbnail')) {
@@ -53,7 +56,8 @@ class CourseController extends Controller
 
     public function edit(Course $course)
     {
-        return view('admin.courses.edit', compact('course'));
+        $categories = Category::all();
+        return view('admin.courses.edit', compact('course', 'categories'));
     }
 
     public function update(Request $request, Course $course)
@@ -65,6 +69,7 @@ class CourseController extends Controller
             'price' => 'required|numeric|min:0',
             'student_limit' => 'nullable|numeric|min:1',
             'status' => 'required|boolean',
+            'category_id' => 'nullable|exists:categories,id'
         ]);
 
         if ($request->hasFile('thumbnail')) {

@@ -22,7 +22,8 @@
                     </div>
                     <div class="form-group">
                         <label for="description">Mô tả chi tiết</label>
-                        <textarea id="description" name="description" placeholder="Giới thiệu về nội dung, mục tiêu của khóa học..."></textarea>
+                        <textarea id="description" name="description"
+                            placeholder="Giới thiệu về nội dung, mục tiêu của khóa học..."></textarea>
                     </div>
                 </div>
 
@@ -41,12 +42,24 @@
             <div class="sidebar-options">
                 <div class="form-card">
                     <div class="form-group">
+                        <label for="category_id">Danh mục</label>
+                        <select id="category_id" name="category_id">
+                            <option value="">-- Không có danh mục --</option>
+                            @foreach ($categories as $category)
+                                <option value="{{ $category->id }}">
+                                    {{ $category->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group">
                         <label for="price">Học phí (VNĐ)</label>
                         <input type="number" id="price" name="price" placeholder="Nhập 0 nếu miễn phí" value="0" required>
                     </div>
                     <div class="form-group">
                         <label for="student_limit">Giới hạn học viên</label>
-                        <input type="number" id="student_limit" name="student_limit" placeholder="Để trống nếu không giới hạn" min="1">
+                        <input type="number" id="student_limit" name="student_limit"
+                            placeholder="Để trống nếu không giới hạn" min="1">
                     </div>
                     <div class="form-group">
                         <label for="status">Trạng thái</label>

@@ -40,7 +40,8 @@ class Course extends Model
 		'thumbnail_url',
 		'price',
 		'student_limit',
-		'is_active'
+		'is_active',
+		'category_id'
 	];
 
 	public function students()
@@ -52,9 +53,14 @@ class Course extends Model
 	{
 		return $this->hasManyThrough(Lesson::class, Section::class);
 	}
-	
+
 	public function sections()
 	{
 		return $this->hasMany(Section::class);
+	}
+
+	public function category()
+	{
+		return $this->belongsTo(Category::class);
 	}
 }

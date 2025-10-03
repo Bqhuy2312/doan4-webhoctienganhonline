@@ -64,6 +64,18 @@
             <div class="sidebar-options">
                 <div class="form-card">
                     <div class="form-group">
+                        <label for="category_id">Danh mục</label>
+                        <select id="category_id" name="category_id">
+                            <option value="">-- Không có danh mục --</option>
+                            @foreach ($categories as $category)
+                                <option value="{{ $category->id }}"
+                                    @if(isset($course) && $course->category_id == $category->id) selected @endif>
+                                    {{ $category->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group">
                         <label for="price">Học phí (VNĐ)</label>
                         <input type="number" id="price" name="price" value="{{ $course->price }}" required>
                     </div>
