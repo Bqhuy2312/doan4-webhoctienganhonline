@@ -64,8 +64,8 @@
                     <div class="form-group">
                         <label for="status">Trạng thái</label>
                         <select id="status" name="status">
-                            <option value="1" selected>Công khai (Hoạt động)</option>
-                            <option value="0">Bản nháp (Tạm ẩn)</option>
+                            <option value="1" selected>Hoạt động</option>
+                            <option value="0">Tạm ẩn</option>
                         </select>
                     </div>
                     <div class="form-actions">

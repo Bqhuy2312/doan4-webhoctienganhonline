@@ -87,8 +87,8 @@
                     <div class="form-group">
                         <label for="status">Trạng thái</label>
                         <select id="status" name="status">
-                            <option value="1" @if($course->is_active) selected @endif>Công khai (Hoạt động)</option>
-                            <option value="0" @if(!$course->is_active) selected @endif>Bản nháp (Tạm ẩn)</option>
+                            <option value="1" @if($course->is_active) selected @endif>Hoạt động</option>
+                            <option value="0" @if(!$course->is_active) selected @endif>Tạm ẩn</option>
                         </select>
                     </div>
                     <div class="form-actions">

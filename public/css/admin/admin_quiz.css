@@ -69,21 +69,25 @@
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
+    align-items: center;
 }
 
 .action-btn {
     border: 1px solid #ced4da;
     color: #495057;
-    padding: 0.4rem 0.8rem;
+    padding: 0 0.8rem;
     border-radius: 6px;
     font-size: 0.85rem;
     font-weight: 500;
     transition: all 0.2s ease;
     display: inline-flex;
+    justify-content: center;
     align-items: center;
     gap: 0.4rem;
     text-decoration: none;
     cursor: pointer;
+    width: auto;
+    height: 34px;
 }
 
 .action-btn:hover {
@@ -92,12 +96,16 @@
     color: #fff;
 }
 
+.action-buttons form {
+    margin: 0;
+}
+
+.action-btn.delete-btn{
+    background-color: transparent;
+}
+
 .action-btn.delete-btn:hover {
     border-color: #dc3545;
     background-color: #dc3545;
     color: #fff;
-}
-
-.action-buttons form {
-    margin: 0;
 }

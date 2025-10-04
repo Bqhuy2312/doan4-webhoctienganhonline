@@ -109,6 +109,10 @@
     color: #fff;
 }
 
+.action-btn.delete-btn{
+    background-color: transparent;
+}
+
 .action-btn.delete-btn:hover {
     border-color: #dc3545;
     background-color: #dc3545;

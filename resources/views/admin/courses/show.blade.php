@@ -86,13 +86,33 @@
         </div>
     @endforelse
 
+    <div id="addSectionModal" class="modal-overlay" onclick="closeModalOnOverlay(event)">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Thêm chương mới</h3>
+                <button class="close-modal" onclick="closeModal('addSectionModal')">&times;</button>
+            </div>
+            <form action="{{ route('admin.courses.sections.store', $course->id) }}" method="POST">
+                @csrf
+                <div class="form-group">
+                    <label for="section_title">Tên chương</label>
+                    <input type="text" name="title" id="section_title" placeholder="Ví dụ: Chương 1: Giới thiệu" required>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('addSectionModal')">Hủy</button>
+                    <button type="submit" class="btn btn-primary">Lưu chương</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <div id="addVideoModal" class="modal-overlay" onclick="closeModalOnOverlay(event)">
         <div class="modal-content">
             <div class="modal-header">
                 <h3>Thêm bài học Video mới</h3>
                 <button class="close-modal" onclick="closeModal('addVideoModal')">&times;</button>
             </div>
-            <form action="{{ route('admin.lessons.store', $course->id) }}" method="POST">
+            <form action="{{ route('admin.lessons.store', $course->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <input type="hidden" name="type" value="video">
                 <input type="hidden" name="section_id" id="addVideo_section_id">
@@ -101,8 +121,8 @@
                     <input type="text" name="title" id="video_title" required>
                 </div>
                 <div class="form-group">
-                    <label for="video_url">Đường dẫn Video (URL)</label>
-                    <input type="url" name="video_url" id="video_url" placeholder="https://youtube.com/..." required>
+                    <label>Tải lên file Video</label>
+                    <input type="file" name="video_file" accept="video/*" required>
                 </div>
                 <div class="form-actions">
                     <button type="button" class="btn btn-secondary" onclick="closeModal('addVideoModal')">Hủy</button>
@@ -156,11 +176,9 @@
                     <label for="quiz_id">Chọn bài Quiz có sẵn</label>
                     <select name="quiz_id" id="quiz_id" required>
                         <option value="" disabled selected>-- Chọn một bài quiz --</option>
-                        {{-- Vòng lặp này sẽ lấy quiz từ CSDL --}}
-                        {{-- @foreach($quizzes as $quiz)
-                        <option value="{{ $quiz->id }}">{{ $quiz->title }}</option>
-                        @endforeach --}}
-                        <option value="1">Bài kiểm tra cuối khóa IELTS</option>
+                        @foreach($quizzes as $quiz)
+                            <option value="{{ $quiz->id }}">{{ $quiz->title }}</option>
+                        @endforeach
                     </select>
                 </div>
                 <div class="form-actions">
@@ -200,10 +218,14 @@
             </div>
             <form id="editVideoForm" action="" method="POST">
                 @csrf @method('PUT')
-                <div class="form-group"><label>Tên bài học</label><input type="text" name="title" id="edit_video_title"
-                        required></div>
-                <div class="form-group"><label>Đường dẫn Video (URL)</label><input type="url" name="video_url"
-                        id="edit_video_url" required></div>
+                <div class="form-group">
+                    <label>Tên bài học</label>
+                    <input type="text" name="title" id="edit_video_title" required>
+                </div>
+                <div class="form-group">
+                    <label>Tải lên file Video mới (tùy chọn)</label>
+                    <input type="file" name="video_file" accept="video/*">
+                </div>
                 <div class="form-actions">
                     <button type="button" class="btn btn-secondary" onclick="closeModal('editVideoModal')">Hủy</button>
                     <button type="submit" class="btn btn-primary">Cập nhật</button>
@@ -243,11 +265,10 @@
                 <div class="form-group">
                     <label>Chọn lại bài Quiz</label>
                     <select name="quiz_id" id="edit_quiz_id" required>
-                        {{-- <option value="" disabled>-- Chọn một bài quiz --</option>
+                        <option value="" disabled>-- Chọn một bài quiz --</option>
                         @foreach($quizzes as $quiz)
-                        <option value="{{ $quiz->id }}">{{ $quiz->title }}</option>
-                        @endforeach --}}
-                        <option value="1">Bài kiểm tra cuối khóa IELTS</option>
+                            <option value="{{ $quiz->id }}">{{ $quiz->title }}</option>
+                        @endforeach
                     </select>
                 </div>
                 <div class="form-actions">

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Course;
 use App\Models\Category;
+use App\Models\Quiz;
 
 class CourseController extends Controller
 {
@@ -50,8 +51,10 @@ class CourseController extends Controller
     public function show(Course $course)
     {
         $course->load('sections.lessons');
+        
+        $quizzes = Quiz::latest()->get();
 
-        return view('admin.courses.show', compact('course'));
+        return view('admin.courses.show', compact('course', 'quizzes'));
     }
 
     public function edit(Course $course)

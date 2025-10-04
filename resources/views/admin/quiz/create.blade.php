@@ -10,35 +10,25 @@
     <div class="page-header">
         <h1>Tạo bài Quiz mới</h1>
     </div>
-
-    <form action="#" method="POST">
+    <form action="{{ route('admin.quizzes.store') }}" method="POST">
         @csrf
         <div class="form-container">
             <div class="main-form">
                 <div class="form-card">
                     <div class="form-group">
                         <label for="title">Tên bài Quiz</label>
-                        <input type="text" id="title" name="title" placeholder="Ví dụ: Bài kiểm tra cuối khóa IELTS" required>
+                        <input type="text" id="title" name="title" value="{{ old('title') }}" required>
                     </div>
                     <div class="form-group">
-                        <label for="description">Mô tả ngắn (tùy chọn)</label>
-                        <textarea id="description" name="description" placeholder="Hướng dẫn hoặc giới thiệu về bài quiz..."></textarea>
+                        <label for="description">Mô tả ngắn</label>
+                        <textarea id="description" name="description">{{ old('description') }}</textarea>
                     </div>
                 </div>
             </div>
-
             <div class="sidebar-options">
                 <div class="form-card">
-                    <div class="form-group">
-                        <label for="course_id">Thuộc khóa học</label>
-                        <select id="course_id" name="course_id" required>
-                            <option value="" disabled selected>-- Chọn khóa học --</option>
-                            <option value="1">IELTS Foundation - Xây dựng nền tảng vững chắc</option>
-                            <option value="2">TOEIC 500+ Cấp tốc trong 3 tháng</option>
-                        </select>
-                    </div>
                     <div class="form-actions">
-                        <button type="button" class="btn btn-secondary">Hủy</button>
+                        <a href="{{ route('admin.quizzes.index') }}" class="btn btn-secondary">Hủy</a>
                         <button type="submit" class="btn btn-primary">Lưu và Thêm câu hỏi</button>
                     </div>
                 </div>

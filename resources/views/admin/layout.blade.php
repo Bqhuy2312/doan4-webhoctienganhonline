@@ -56,8 +56,8 @@
                 </li>
 
                 <li class="nav-item">
-                    <a href="{{ route('admin.quiz.index') }}"
-                        class="nav-link {{ request()->routeIs('admin.quiz.*') ? 'active' : '' }}">
+                    <a href="{{ route('admin.quizzes.index') }}"
+                        class="nav-link {{ request()->routeIs('admin.quizzes.*') ? 'active' : '' }}">
                         <i class="fa-solid fa-question-circle"></i>
                         <p>Quản lý Quiz</p>
                     </a>

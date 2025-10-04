@@ -18,7 +18,7 @@
             <thead>
                 <tr>
                     <th>Tên danh mục</th>
-                    <th>Slug</th>
+                    <th></th>
                     <th>Số khóa học</th>
                     <th>Hành động</th>
                 </tr>

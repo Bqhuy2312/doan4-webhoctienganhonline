@@ -19,11 +19,16 @@ class LessonController extends Controller
         ]);
 
         if ($request->type === 'video') {
-            $validated += $request->validate(['video_url' => 'required|url']);
-        } elseif ($request->type === 'pdf') {
+            $validated += $request->validate(['video_file' => 'required|file|mimes:mp4,mov,avi,wmv|max:512000']); 
+        }  elseif ($request->type === 'pdf') {
             $validated += $request->validate(['pdf_file' => 'required|file|mimes:pdf|max:10240']);
         } elseif ($request->type === 'quiz') {
             $validated += $request->validate(['quiz_id' => 'required|exists:quizzes,id']);
+        }
+
+        if ($request->hasFile('video_file')) {
+            $path = $request->file('video_file')->store('lesson_videos', 'public');
+            $validated['video_path'] = $path;
         }
 
         if ($request->hasFile('pdf_file')) {
@@ -43,10 +48,19 @@ class LessonController extends Controller
         ]);
 
         if ($lesson->type === 'video') {
-            $validated += $request->validate(['video_url' => 'required|url']);
+            if ($request->hasFile('video_file')) {
+                $validated += $request->validate(['video_file' => 'required|file|mimes:mp4,mov,avi,wmv|max:512000']);
+                
+                if ($lesson->video_path) {
+                    Storage::disk('public')->delete($lesson->video_path);
+                }
+                
+                $path = $request->file('video_file')->store('lesson_videos', 'public');
+                $validated['video_path'] = $path;
+            }
         } elseif ($lesson->type === 'pdf') {
             if ($request->hasFile('pdf_file')) {
-                $validated += $request->validate(['pdf_file' => 'required|file|mimes:pdf|max:61440']); // 60MB
+                $validated += $request->validate(['pdf_file' => 'required|file|mimes:pdf|max:61440']);
 
                 if ($lesson->pdf_path) {
                     Storage::disk('public')->delete($lesson->pdf_path);

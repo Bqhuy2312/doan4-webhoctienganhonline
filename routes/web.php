@@ -11,6 +11,8 @@ use App\Http\Controllers\Admin\CourseController;
 use App\Http\Controllers\Admin\LessonController;
 use App\Http\Controllers\Admin\SectionController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\QuizController;
+use App\Http\Controllers\Admin\QuestionController;
 
 // Form quên mật khẩu
 Route::get('/forgot-password', function () {
@@ -92,21 +94,8 @@ Route::prefix('admin')->group(function () {
         })->name('admin.students.show');
 
         // Quizzes
-        Route::get('/quizzes', function () {
-            return view('admin.quiz.index');
-        })->name('admin.quiz.index');
-        Route::get('/quizzes/create', function () {
-            return view('admin.quiz.create');
-        })->name('admin.quiz.create');
-        Route::get('/quizzes/{id}/edit', function () {
-            return view('admin.quiz.edit');
-        })->name('admin.quiz.edit');
-        Route::get('/quizzes/{id}/questions', function () {
-            return view('admin.quiz.question');
-        })->name('admin.quiz.question');
-        Route::get('/quizzes/{id}/results', function () {
-            return view('admin.quiz.result');
-        })->name('admin.quiz.result');
+        Route::resource('quizzes', QuizController::class)->names('admin.quizzes');
+        Route::resource('quizzes.questions', QuestionController::class)->names('admin.quizzes.questions')->shallow();
 
         // Chat
         Route::get('/chat', function () {
