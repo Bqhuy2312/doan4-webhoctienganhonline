@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Admin\adAuthController;
@@ -17,18 +18,17 @@ use App\Http\Controllers\Admin\QuestionController;
 use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Admin\ChatController;
 
-// Form quên mật khẩu
+// =================== AUTH =================== //
+
+// Quên mật khẩu
 Route::get('/forgot-password', function () {
     return view('auth.forgot-password');
 })->name('password.request');
 
-// Gửi email reset mật khẩu
 Route::post('/forgot-password', function (Request $request) {
     $request->validate(['email' => 'required|email']);
 
-    $status = Password::sendResetLink(
-        $request->only('email')
-    );
+    $status = Password::sendResetLink($request->only('email'));
 
     return $status === Password::RESET_LINK_SENT
         ? back()->with(['status' => __($status)])
@@ -46,30 +46,37 @@ Route::post('/login', [AuthController::class, 'login'])->name('login.submit');
 // Đăng xuất
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+// =================== USER =================== //
+
+// Trang chủ mặc định → user.home
 Route::get('/', [UserController::class, 'home'])->name('user.home');
-// Nhóm route cho User
-Route::prefix('user')->group(function () {
+
+Route::prefix('user')->middleware('auth')->group(function () {
     Route::get('/home', [UserController::class, 'home'])->name('user.home');
     Route::get('/courses', [UserController::class, 'courses'])->name('user.courses');
     Route::get('/course/{id}', [UserController::class, 'courseDetail'])->name('user.course.detail');
-    Route::get('/profile', [UserController::class, 'profile'])->name('user.profile');
     Route::get('/quiz', [UserController::class, 'quiz'])->name('user.quiz');
     Route::get('/chat', [UserController::class, 'chat'])->name('user.chat');
+
+    // Hồ sơ cá nhân
+    Route::get('/profile', [ProfileController::class, 'show'])->name('user.profile');
+    Route::post('/profile/update', [ProfileController::class, 'update'])->name('user.profile.update');
+    Route::post('/profile/password', [ProfileController::class, 'changePassword'])->name('user.profile.password');
 });
 
-// Nhóm route cho Admin
+// =================== ADMIN =================== //
 Route::prefix('admin')->group(function () {
 
-    // Login
+    // Login Admin
     Route::get('/', [adAuthController::class, 'showLoginForm'])->name('admin.login');
     Route::post('/login', [adAuthController::class, 'login'])->name('admin.auth.login.submit');
 
     Route::middleware(['auth'])->group(function () {
 
-        // Logout
-        Route::post('/logout', [adAuthController::class, 'logout'])->name('admin.auth.logout');
 
-        // Dashboard
+        // Logout
+
+        Route::post('/logout', [adAuthController::class, 'logout'])->name('admin.auth.logout');
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 
         // Categories
@@ -103,5 +110,6 @@ Route::prefix('admin')->group(function () {
         // Các route API để JS gọi
         Route::get('/chat/{user}/messages', [ChatController::class, 'fetchMessages'])->name('admin.chat.fetch');
         Route::post('/chat/{user}/messages', [ChatController::class, 'sendMessage'])->name('admin.chat.send');
+
     });
 });

@@ -37,19 +37,22 @@
 
                         <!-- Menu -->
                         <div id="dropdownMenu" 
-                             class="hidden absolute right-0 mt-2 w-40 bg-white border border-gray-200 rounded-lg shadow-lg">
-                            <a href="{{ route('user.profile') }}" 
-                               class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-t-lg">
-                               Hồ sơ
-                            </a>
-                            <form action="{{ route('logout') }}" method="POST">
-                                @csrf
-                                <button type="submit" 
-                                    class="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-b-lg">
-                                    Đăng xuất
-                                </button>
-                            </form>
-                        </div>
+     class="hidden absolute right-0 mt-2 w-56 bg-white border border-gray-200 rounded-lg shadow-lg">
+
+    <a href="{{ route('user.profile') }}" 
+       class="flex items-center justify-center w-full px-4 py-2 text-gray-700 text-base hover:bg-gray-100 rounded-t-lg whitespace-nowrap">
+       Hồ sơ
+    </a>
+
+    <form action="{{ route('logout') }}" method="POST" class="m-0">
+        @csrf
+        <button type="submit" 
+            class="flex items-center justify-center w-full px-4 py-2 text-gray-700 text-base hover:bg-gray-100 rounded-b-lg whitespace-nowrap">
+            Đăng xuất
+        </button>
+    </form>
+</div>
+
                     </div>
                 @else
                     <!-- Nếu chưa đăng nhập -->
@@ -68,7 +71,7 @@
     <!-- Footer -->
     <footer class="bg-gray-800 text-white py-6 mt-10">
         <div class="container mx-auto text-center">
-            <p>&copy; {{ date('Y') }} E-Learning. All rights reserved.</p>
+            <p>&copy; {{ date('Y') }} E-Online. All rights reserved.</p>
         </div>
     </footer>
 
