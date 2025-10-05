@@ -73,9 +73,7 @@ Route::prefix('admin')->group(function () {
 
     Route::middleware(['auth'])->group(function () {
 
-
         // Logout
-
         Route::post('/logout', [adAuthController::class, 'logout'])->name('admin.auth.logout');
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 
@@ -97,6 +95,7 @@ Route::prefix('admin')->group(function () {
         Route::delete('/lessons/{lesson}', [LessonController::class, 'destroy'])->name('admin.lessons.destroy');
 
         // Students
+
         Route::get('/students', [StudentController::class, 'index'])->name('admin.students.index');
         Route::get('/students/{user}', [StudentController::class, 'show'])->name('admin.students.show');
 
