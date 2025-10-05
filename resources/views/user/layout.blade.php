@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>@yield('title', 'Học Tiếng Anh Online')</title>
     @vite('resources/css/app.css')
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body class="bg-gray-50 text-gray-800">
 
@@ -78,5 +79,6 @@
         }
         
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

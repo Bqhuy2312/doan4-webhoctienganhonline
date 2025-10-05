@@ -11,7 +11,7 @@
     @stack('styles')
 </head>
 
-<body>
+<body data-auth-user-id="{{ Auth::id() }}">
 
     <aside class="admin-sidebar">
         <a href="{{ route('admin.dashboard') }}" class="brand-link">
@@ -92,6 +92,30 @@
         </nav>
     </aside>
     <main class="main-content">
+
+        <header class="main-header">
+            <nav class="main-navbar">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link" data-bs-toggle="dropdown" href="#" id="notification-bell">
+                            <i class="far fa-bell"></i>
+                            <span class="badge badge-warning navbar-badge" id="notification-count"
+                                style="display: none;"></span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right" id="notification-list">
+                            <span class="dropdown-item dropdown-header">Thông báo</span>
+                            <div class="dropdown-divider"></div>
+                            <div id="notification-items">
+                                <a href="#" class="dropdown-item text-center text-muted">Không có thông báo mới</a>
+                            </div>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item dropdown-footer">Xem tất cả thông báo</a>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+        </header>
+
         <div class="alert-container" style="position: fixed; top: 80px; right: 20px; z-index: 9999; width: 350px;">
             @if (session('success'))
                 <div class="alert alert-success" role="alert">
@@ -118,6 +142,8 @@
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ asset('js/app.js') }}"></script> 
+    
     @stack('scripts')
 </body>
 

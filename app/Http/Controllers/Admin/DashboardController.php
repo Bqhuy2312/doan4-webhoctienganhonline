@@ -24,7 +24,6 @@ class DashboardController extends Controller
                               ->take(6)
                               ->get();
 
-        // 1. Biểu đồ cột: Lấy 6 khóa học có nhiều học viên nhất
         $studentsPerCourseData = [
 
             'labels' => $topCourses->pluck('title'),

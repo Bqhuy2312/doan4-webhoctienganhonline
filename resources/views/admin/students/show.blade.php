@@ -8,7 +8,7 @@
 
 @section('content')
 
-    @php
+    {{-- @php
         use Carbon\Carbon;
         $student = (object) [
             'id' => 1,
@@ -35,7 +35,7 @@
                 'progress' => 0
             ],
         ];
-    @endphp
+    @endphp --}}
 
     <div class="page-header">
         <h1>Thông tin chi tiết học viên</h1>

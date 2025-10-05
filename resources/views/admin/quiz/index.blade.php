@@ -68,7 +68,7 @@
                                     title="Quản lý câu hỏi">
                                     <i class="fa-solid fa-list-check"></i> <span>Câu hỏi</span>
                                 </a>
-                                <a href="#" class="action-btn" title="Xem kết quả">
+                                <a href="{{ route('admin.quizzes.results', $quiz->id) }}" class="action-btn" title="Xem kết quả">
                                     <i class="fa-solid fa-square-poll-vertical"></i> <span>Kết quả</span>
                                 </a>
                                 <a href="{{ route('admin.quizzes.edit', $quiz->id) }}" class="action-btn" title="Sửa"><i

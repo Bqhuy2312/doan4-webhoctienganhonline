@@ -19,12 +19,12 @@ class User extends Authenticatable
      */
     protected $fillable = [
 
-    'first_name',
-    'last_name',
-    'email',
-    'password',
-    'role',
-];
+        'first_name',
+        'last_name',
+        'email',
+        'password',
+        'role',
+    ];
 
 
     /**
@@ -53,5 +53,20 @@ class User extends Authenticatable
     public function courses()
     {
         return $this->belongsToMany(Course::class, 'enrollments');
+    }
+
+    public function enrollments()
+    {
+        return $this->hasMany(Enrollment::class);
+    }
+
+    public function completedLessons()
+    {
+        return $this->belongsToMany(Lesson::class, 'lesson_user')->withTimestamps();
+    }
+
+    public function messages()
+    {
+        return $this->hasMany(Message::class, 'sender_id');
     }
 }

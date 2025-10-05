@@ -7,7 +7,8 @@
 @endpush
 
 @section('content')
-    @php
+
+    {{-- @php
         use Carbon\Carbon;
         $allStudents = [
             (object) ['id' => 1, 'name' => 'Nguyễn Thu Trang', 'email' => 'trang.nt@example.com', 'created_at' => Carbon::parse('2025-09-24')],
@@ -16,7 +17,7 @@
             (object) ['id' => 4, 'name' => 'Phạm Văn Đức', 'email' => 'duc.pv@example.com', 'created_at' => Carbon::parse('2025-09-18')],
             (object) ['id' => 5, 'name' => 'Vũ Hải Yến', 'email' => 'yen.vh@example.com', 'created_at' => Carbon::parse('2025-09-15')],
         ];
-    @endphp
+    @endphp --}}
 
     <div class="page-header">
         <h1>Tất cả học viên</h1>

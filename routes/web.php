@@ -12,7 +12,10 @@ use App\Http\Controllers\Admin\LessonController;
 use App\Http\Controllers\Admin\SectionController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\QuizController;
+use App\Http\Controllers\Admin\QuizAttemptController;
 use App\Http\Controllers\Admin\QuestionController;
+use App\Http\Controllers\Admin\StudentController;
+use App\Http\Controllers\Admin\ChatController;
 
 // Form quên mật khẩu
 Route::get('/forgot-password', function () {
@@ -57,10 +60,11 @@ Route::prefix('user')->group(function () {
 // Nhóm route cho Admin
 Route::prefix('admin')->group(function () {
 
+    // Login
     Route::get('/', [adAuthController::class, 'showLoginForm'])->name('admin.login');
     Route::post('/login', [adAuthController::class, 'login'])->name('admin.auth.login.submit');
 
-    Route::middleware(['auth', 'auth'])->group(function () {
+    Route::middleware(['auth'])->group(function () {
 
         // Logout
         Route::post('/logout', [adAuthController::class, 'logout'])->name('admin.auth.logout');
@@ -86,20 +90,18 @@ Route::prefix('admin')->group(function () {
         Route::delete('/lessons/{lesson}', [LessonController::class, 'destroy'])->name('admin.lessons.destroy');
 
         // Students
-        Route::get('/students', function () {
-            return view('admin.students.index');
-        })->name('admin.students.index');
-        Route::get('/students/{id}', function () {
-            return view('admin.students.show');
-        })->name('admin.students.show');
+        Route::get('/students', [StudentController::class, 'index'])->name('admin.students.index');
+        Route::get('/students/{user}', [StudentController::class, 'show'])->name('admin.students.show');
 
         // Quizzes
         Route::resource('quizzes', QuizController::class)->names('admin.quizzes');
         Route::resource('quizzes.questions', QuestionController::class)->names('admin.quizzes.questions')->shallow();
+        Route::get('/quizzes/{quiz}/results', [QuizAttemptController::class, 'index'])->name('admin.quizzes.results');
 
         // Chat
-        Route::get('/chat', function () {
-            return view('admin.chat.index');
-        })->name('admin.chat.index');
+        Route::get('/chat', [ChatController::class, 'index'])->name('admin.chat.index');
+        // Các route API để JS gọi
+        Route::get('/chat/{user}/messages', [ChatController::class, 'fetchMessages'])->name('admin.chat.fetch');
+        Route::post('/chat/{user}/messages', [ChatController::class, 'sendMessage'])->name('admin.chat.send');
     });
 });
