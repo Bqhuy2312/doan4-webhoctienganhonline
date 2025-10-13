@@ -71,7 +71,7 @@ Route::prefix('admin')->group(function () {
     Route::get('/', [adAuthController::class, 'showLoginForm'])->name('admin.login');
     Route::post('/login', [adAuthController::class, 'login'])->name('admin.auth.login.submit');
 
-    Route::middleware(['auth'])->group(function () {
+    Route::middleware( ['auth'])->group(callback: function () {
 
         // Logout
         Route::post('/logout', [adAuthController::class, 'logout'])->name('admin.auth.logout');
@@ -103,6 +103,7 @@ Route::prefix('admin')->group(function () {
         Route::resource('quizzes', QuizController::class)->names('admin.quizzes');
         Route::resource('quizzes.questions', QuestionController::class)->names('admin.quizzes.questions')->shallow();
         Route::get('/quizzes/{quiz}/results', [QuizAttemptController::class, 'index'])->name('admin.quizzes.results');
+        Route::post('/quizzes/import', [QuizController::class, 'import'])->name('admin.quizzes.import');
 
         // Chat
         Route::get('/chat', [ChatController::class, 'index'])->name('admin.chat.index');

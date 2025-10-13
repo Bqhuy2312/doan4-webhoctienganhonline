@@ -8,14 +8,6 @@
 
 @section('content')
 
-    {{-- @php
-        $quiz = (object) [
-            'id' => 1,
-            'title' => 'Bài kiểm tra cuối khóa IELTS Foundation',
-            'description' => 'Bài quiz này dùng để đánh giá kiến thức tổng hợp của học viên sau khi hoàn thành khóa học.',
-            'course_id' => 1,
-        ];
-    @endphp --}}
     <div class="page-header">
         <h1>Chỉnh sửa bài Quiz</h1>
     </div>

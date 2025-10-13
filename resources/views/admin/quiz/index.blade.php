@@ -8,43 +8,48 @@
 
 @section('content')
 
-    {{-- @php
-    use Carbon\Carbon;
-    $quizzes = [
-    (object) [
-    'id' => 1,
-    'title' => 'Bài kiểm tra cuối khóa IELTS Foundation',
-    'course' => (object) ['id' => 1, 'title' => 'IELTS Foundation - Xây dựng nền tảng vững chắc'],
-    'questions_count' => 20,
-    'created_at' => Carbon::parse('2025-09-25'),
-    ],
-    (object) [
-    'id' => 2,
-    'title' => 'Kiểm tra từ vựng Unit 1-5',
-    'course' => (object) ['id' => 2, 'title' => 'TOEIC 500+ Cấp tốc trong 3 tháng'],
-    'questions_count' => 50,
-    'created_at' => Carbon::parse('2025-09-20'),
-    ],
-    (object) [
-    'id' => 3,
-    'title' => 'Quiz về các thì trong Tiếng Anh',
-    'course' => (object) ['id' => 5, 'title' => 'Ngữ pháp tiếng Anh nâng cao toàn tập'],
-    'questions_count' => 15,
-    'created_at' => Carbon::parse('2025-09-18'),
-    ],
-    (object) [
-    'id' => 4,
-    'title' => 'Bài kiểm tra giữa kỳ Giao tiếp cơ bản',
-    'course' => (object) ['id' => 3, 'title' => 'Giao tiếp cơ bản cho người mất gốc'],
-    'questions_count' => 25,
-    'created_at' => Carbon::parse('2025-09-10'),
-    ],
-    ];
-    @endphp --}}
-
     <div class="page-header">
         <h1>Danh sách Quiz</h1>
-        <a href="{{ route('admin.quizzes.create') }}" class="add-new-btn"><i class="fa-solid fa-plus"></i> Thêm Quiz mới</a>
+        <div class="head-actions">
+            <a href="{{ route('admin.quizzes.create') }}" class="add-new-btn"><i class="fa-solid fa-plus"></i> Thêm Quiz
+                mới</a>
+            <a href="#" class="add-new-btn" data-bs-toggle="modal" data-bs-target="#importQuizModal" role="button">
+                <i class="fa-solid fa-file-import"></i> Import từ Word
+            </a>
+        </div>
+
+        <div class="modal fade" id="importQuizModal" tabindex="-1" aria-labelledby="importQuizModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="importQuizModalLabel">Import bài Quiz từ file Word</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form action="{{ route('admin.quizzes.import') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="quiz_title" class="form-label"><strong>Tiêu đề bài Quiz mới</strong></label>
+                                <input type="text" class="form-control" name="quiz_title" id="quiz_title" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="word_file" class="form-label"><strong>Chọn file Word (.docx)</strong></label>
+                                <input class="form-control" type="file" name="word_file" id="word_file" accept=".docx"
+                                    required>
+                            </div>
+                            <div class="alert alert-warning" role="alert">
+                                <strong>Lưu ý:</strong> File Word phải tuân thủ đúng định dạng đã được quy định.
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                            <button type="submit" class="btn btn-primary">Bắt đầu Import</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="table-container">
         <table class="quizzes-table">
@@ -68,7 +73,8 @@
                                     title="Quản lý câu hỏi">
                                     <i class="fa-solid fa-list-check"></i> <span>Câu hỏi</span>
                                 </a>
-                                <a href="{{ route('admin.quizzes.results', $quiz->id) }}" class="action-btn" title="Xem kết quả">
+                                <a href="{{ route('admin.quizzes.results', $quiz->id) }}" class="action-btn"
+                                    title="Xem kết quả">
                                     <i class="fa-solid fa-square-poll-vertical"></i> <span>Kết quả</span>
                                 </a>
                                 <a href="{{ route('admin.quizzes.edit', $quiz->id) }}" class="action-btn" title="Sửa"><i

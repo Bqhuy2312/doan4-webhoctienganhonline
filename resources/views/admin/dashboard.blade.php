@@ -8,22 +8,6 @@
 
 @section('content')
 
-    {{-- @php
-        $totalStudents = 1250;
-        $newStudentsThisWeek = 85;
-        $activeCourses = 25;
-
-        $studentsPerCourseData = [
-            'labels' => ['IELTS Foundation', 'TOEIC 500+', 'Giao tiếp cơ bản', 'Tiếng Anh cho IT', 'Ngữ pháp', 'Luyện thi THPT'],
-            'values' => [125, 210, 95, 78, 60, 350]
-        ];
-
-        $completionRateData = [
-            'labels' => ['Đã hoàn thành', 'Đang học', 'Chưa bắt đầu'],
-            'values' => [65, 25, 10]
-        ];
-    @endphp --}}
-
     <div class="dashboard-header">
         <h1>Tổng quan</h1>
     </div>
