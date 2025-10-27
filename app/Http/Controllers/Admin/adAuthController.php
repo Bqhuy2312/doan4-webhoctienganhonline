@@ -23,7 +23,7 @@ class adAuthController extends Controller
         if (Auth::attempt(array_merge($credentials, ['role' => 'admin']))) {
             $request->session()->regenerate();
 
-            return redirect()->intended('/admin/dashboard');
+            return view('admin.dashboard');
         }
 
         return back()->withErrors([

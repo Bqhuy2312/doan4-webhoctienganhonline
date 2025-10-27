@@ -8,26 +8,6 @@
 
 @section('content')
 
-    {{-- @php
-    $conversations = [
-    (object) ['id' => 1, 'name' => 'Nguyễn Thu Trang', 'avatar' => 'https://i.pravatar.cc/150?img=1', 'last_message' => 'Dạ
-    em cảm ơn admin ạ!', 'active' => true],
-    (object) ['id' => 2, 'name' => 'Trần Minh Hoàng', 'avatar' => 'https://i.pravatar.cc/150?img=2', 'last_message' => 'Khóa
-    học IELTS Foundation có giới hạn số lượng học viên không ạ?', 'active' => false],
-    (object) ['id' => 3, 'name' => 'Lê Thị Kim Anh', 'avatar' => 'https://i.pravatar.cc/150?img=3', 'last_message' => 'Mình
-    muốn hỏi về lịch khai giảng...', 'active' => false],
-    ];
-    $activeChatPartner = "Nguyễn Thu Trang";
-    $messages = [
-    (object) ['type' => 'user', 'text' => 'Chào admin, em muốn hỏi về cách làm bài quiz ạ.'],
-    (object) ['type' => 'admin', 'text' => 'Chào bạn, bạn có thắc mắc cụ thể ở phần nào không?'],
-    (object) ['type' => 'user', 'text' => 'Dạ em không thấy nút nộp bài ở đâu ạ.'],
-    (object) ['type' => 'admin', 'text' => 'Nút "Nộp bài" sẽ hiện ra ở góc trên bên phải màn hình sau khi bạn trả lời hết
-    các câu hỏi nhé.'],
-    (object) ['type' => 'user', 'text' => 'Dạ em cảm ơn admin ạ!'],
-    ];
-    @endphp --}}
-
     <div class="chat-container">
         <aside class="chat-sidebar">
             <div class="sidebar-header">

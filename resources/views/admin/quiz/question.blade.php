@@ -8,24 +8,6 @@
 
 @section('content')
 
-    {{-- @php
-    $quizName = "Bài kiểm tra cuối khóa IELTS Foundation";
-    $questions = [
-    (object) [
-    'id' => 1,
-    'text' => 'Which of the following is a synonym for "ubiquitous"?',
-    'options' => ['Rare', 'Everywhere', 'Hidden', 'Complex'],
-    'correct_option' => 'Everywhere'
-    ],
-    (object) [
-    'id' => 2,
-    'text' => 'Fill in the blank: The company decided to ___ its operations to Asia.',
-    'options' => ['Expand', 'Shrink', 'Sell', 'Close'],
-    'correct_option' => 'Expand'
-    ],
-    ];
-    @endphp --}}
-
     <div class="page-header">
         <h1>Quản lý câu hỏi</h1>
         <h2 class="quiz-subtitle">Quiz: {{ $quiz->title }}</h2>

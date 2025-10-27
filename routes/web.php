@@ -85,8 +85,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/', [adAuthController::class, 'showLoginForm'])->name('login');
     Route::post('/login', [adAuthController::class, 'login'])->name('auth.login.submit');
 
+
     Route::middleware(['auth'])->group(function () {
         Route::post('/logout', [adAuthController::class, 'logout'])->name('auth.logout');
+
 
         // --- Dashboard ---
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -113,10 +115,21 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/students', [StudentController::class, 'index'])->name('students.index');
         Route::get('/students/{user}', [StudentController::class, 'show'])->name('students.show');
 
-        // --- Quiz ---
-        Route::resource('quizzes', QuizController::class)->names('quizzes');
-        Route::resource('quizzes.questions', QuestionController::class)->names('quizzes.questions')->shallow();
-        Route::get('/quizzes/{quiz}/results', [QuizAttemptController::class, 'index'])->name('quizzes.results');
+        Route::get('/students', [StudentController::class, 'index'])->name('admin.students.index');
+        Route::get('/students/{user}', [StudentController::class, 'show'])->name('admin.students.show');
+
+        // Quizzes
+        Route::resource('quizzes', QuizController::class)->names('admin.quizzes');
+        Route::resource('quizzes.questions', QuestionController::class)->names('admin.quizzes.questions')->shallow();
+        Route::get('/quizzes/{quiz}/results', [QuizAttemptController::class, 'index'])->name('admin.quizzes.results');
+        Route::post('/quizzes/import', [QuizController::class, 'import'])->name('admin.quizzes.import');
+
+        // Chat
+        Route::get('/chat', [ChatController::class, 'index'])->name('admin.chat.index');
+        // Các route API để JS gọi
+        Route::get('/chat/{user}/messages', [ChatController::class, 'fetchMessages'])->name('admin.chat.fetch');
+        Route::post('/chat/{user}/messages', [ChatController::class, 'sendMessage'])->name('admin.chat.send');
+
 
         // --- Chat ---
         Route::get('/chat', [ChatController::class, 'index'])->name('chat.index');

@@ -8,18 +8,6 @@
 
 @section('content')
 
-    {{-- @php
-    $quizName = "Bài kiểm tra cuối khóa IELTS Foundation";
-    $results = [
-    (object) ['student_name' => 'Nguyễn Thu Trang', 'score' => '18/20', 'percentage' => '90%', 'submitted_at' => '25/09/2025
-    10:30'],
-    (object) ['student_name' => 'Trần Minh Hoàng', 'score' => '15/20', 'percentage' => '75%', 'submitted_at' => '25/09/2025
-    11:15'],
-    (object) ['student_name' => 'Lê Thị Kim Anh', 'score' => '19/20', 'percentage' => '95%', 'submitted_at' => '26/09/2025
-    08:00'],
-    ];
-    @endphp --}}
-
     <div class="page-header">
         <h1>Kết quả Quiz</h1>
         <h2 class="quiz-subtitle">Quiz: {{ $quiz->title }}</h2>
