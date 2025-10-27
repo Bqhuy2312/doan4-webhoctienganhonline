@@ -1,11 +1,15 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Http\Request;
+
+// ==== USER CONTROLLERS ==== //
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProfileController;
-use Illuminate\Support\Facades\Password;
-use Illuminate\Http\Request;
+
+// ==== ADMIN CONTROLLERS ==== //
 use App\Http\Controllers\Admin\adAuthController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\CourseController;
@@ -18,22 +22,9 @@ use App\Http\Controllers\Admin\QuestionController;
 use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Admin\ChatController;
 
-// =================== AUTH =================== //
-
-// Quên mật khẩu
-Route::get('/forgot-password', function () {
-    return view('auth.forgot-password');
-})->name('password.request');
-
-Route::post('/forgot-password', function (Request $request) {
-    $request->validate(['email' => 'required|email']);
-
-    $status = Password::sendResetLink($request->only('email'));
-
-    return $status === Password::RESET_LINK_SENT
-        ? back()->with(['status' => __($status)])
-        : back()->withErrors(['email' => __($status)]);
-})->name('password.email');
+//
+// ========================= AUTH (USER) =========================
+//
 
 // Đăng ký
 Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
@@ -46,69 +37,90 @@ Route::post('/login', [AuthController::class, 'login'])->name('login.submit');
 // Đăng xuất
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// =================== USER =================== //
+// Quên mật khẩu
+Route::get('/forgot-password', function () {
+    return view('auth.forgot-password');
+})->name('password.request');
 
-// Trang chủ mặc định → user.home
+Route::post('/forgot-password', function (Request $request) {
+    $request->validate(['email' => 'required|email']);
+    $status = Password::sendResetLink($request->only('email'));
+
+    return $status === Password::RESET_LINK_SENT
+        ? back()->with(['status' => __($status)])
+        : back()->withErrors(['email' => __($status)]);
+})->name('password.email');
+
+//
+// ========================= USER =========================
+//
+
+// Trang chủ (cả "/" và "/user/home" đều về home)
 Route::get('/', [UserController::class, 'home'])->name('user.home');
 
 Route::prefix('user')->middleware('auth')->group(function () {
+    // Trang chính
     Route::get('/home', [UserController::class, 'home'])->name('user.home');
+
+    // Khóa học
     Route::get('/courses', [UserController::class, 'courses'])->name('user.courses');
     Route::get('/course/{id}', [UserController::class, 'courseDetail'])->name('user.course.detail');
+
+    // Quiz + Chat
     Route::get('/quiz', [UserController::class, 'quiz'])->name('user.quiz');
     Route::get('/chat', [UserController::class, 'chat'])->name('user.chat');
 
     // Hồ sơ cá nhân
-    Route::get('/profile', [ProfileController::class, 'show'])->name('user.profile');
+    Route::get('/profile', [ProfileController::class, 'index'])->name('user.profile');
     Route::post('/profile/update', [ProfileController::class, 'update'])->name('user.profile.update');
     Route::post('/profile/password', [ProfileController::class, 'changePassword'])->name('user.profile.password');
 });
 
-// =================== ADMIN =================== //
-Route::prefix('admin')->group(function () {
+//
+// ========================= ADMIN =========================
+//
+Route::prefix('admin')->name('admin.')->group(function () {
 
-    // Login Admin
-    Route::get('/', [adAuthController::class, 'showLoginForm'])->name('admin.login');
-    Route::post('/login', [adAuthController::class, 'login'])->name('admin.auth.login.submit');
+    // --- Auth ---
+    Route::get('/', [adAuthController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [adAuthController::class, 'login'])->name('auth.login.submit');
 
     Route::middleware(['auth'])->group(function () {
+        Route::post('/logout', [adAuthController::class, 'logout'])->name('auth.logout');
 
-        // Logout
-        Route::post('/logout', [adAuthController::class, 'logout'])->name('admin.auth.logout');
-        Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+        // --- Dashboard ---
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-        // Categories
-        Route::resource('categories', CategoryController::class)->names('admin.categories')->except(['show', 'create', 'edit']);
+        // --- Quản lý danh mục ---
+        Route::resource('categories', CategoryController::class)
+            ->names('categories')
+            ->except(['show', 'create', 'edit']);
 
-        // Courses
-        Route::resource('courses', CourseController::class)->names('admin.courses');
+        // --- Quản lý khóa học ---
+        Route::resource('courses', CourseController::class)->names('courses');
 
-        // Sections
-        Route::post('/courses/{course}/sections', [SectionController::class, 'store'])->name('admin.courses.sections.store');
-        Route::put('/sections/{section}', [SectionController::class, 'update'])->name('admin.sections.update');
-        Route::delete('/sections/{section}', [SectionController::class, 'destroy'])->name('admin.sections.destroy');
+        // --- Section ---
+        Route::post('/courses/{course}/sections', [SectionController::class, 'store'])->name('courses.sections.store');
+        Route::put('/sections/{section}', [SectionController::class, 'update'])->name('sections.update');
+        Route::delete('/sections/{section}', [SectionController::class, 'destroy'])->name('sections.destroy');
 
-        // Lessons
-        Route::post('/courses/{course}/lessons', [LessonController::class, 'store'])->name('admin.lessons.store');
-        Route::put('/lessons/{lesson}', [LessonController::class, 'update'])->name('admin.lessons.update');
-        Route::delete('/lessons/{lesson}', [LessonController::class, 'destroy'])->name('admin.lessons.destroy');
-        Route::delete('/lessons/{lesson}', [LessonController::class, 'destroy'])->name('admin.lessons.destroy');
+        // --- Lesson ---
+        Route::post('/courses/{course}/lessons', [LessonController::class, 'store'])->name('lessons.store');
+        Route::put('/lessons/{lesson}', [LessonController::class, 'update'])->name('lessons.update');
+        Route::delete('/lessons/{lesson}', [LessonController::class, 'destroy'])->name('lessons.destroy');
 
-        // Students
+        // --- Student ---
+        Route::get('/students', [StudentController::class, 'index'])->name('students.index');
+        Route::get('/students/{user}', [StudentController::class, 'show'])->name('students.show');
 
-        Route::get('/students', [StudentController::class, 'index'])->name('admin.students.index');
-        Route::get('/students/{user}', [StudentController::class, 'show'])->name('admin.students.show');
+        // --- Quiz ---
+        Route::resource('quizzes', QuizController::class)->names('quizzes');
+        Route::resource('quizzes.questions', QuestionController::class)->names('quizzes.questions')->shallow();
+        Route::get('/quizzes/{quiz}/results', [QuizAttemptController::class, 'index'])->name('quizzes.results');
 
-        // Quizzes
-        Route::resource('quizzes', QuizController::class)->names('admin.quizzes');
-        Route::resource('quizzes.questions', QuestionController::class)->names('admin.quizzes.questions')->shallow();
-        Route::get('/quizzes/{quiz}/results', [QuizAttemptController::class, 'index'])->name('admin.quizzes.results');
-
-        // Chat
-        Route::get('/chat', [ChatController::class, 'index'])->name('admin.chat.index');
-        // Các route API để JS gọi
-        Route::get('/chat/{user}/messages', [ChatController::class, 'fetchMessages'])->name('admin.chat.fetch');
-        Route::post('/chat/{user}/messages', [ChatController::class, 'sendMessage'])->name('admin.chat.send');
-
+        // --- Chat ---
+        Route::get('/chat', [ChatController::class, 'index'])->name('chat.index');
+        Route::get('/chat/{user}/messages', [ChatController::class, 'fetchMessages'])->name('chat.fetch');
+        Route::post('/chat/{user}/messages', [ChatController::class, 'sendMessage'])->name('chat.send');
     });
 });

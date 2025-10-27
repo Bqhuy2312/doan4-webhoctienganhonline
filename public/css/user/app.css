@@ -1,0 +1,139 @@
+/* ===== Tổng thể ===== */
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background-color: #f8f9fa;
+    color: #000;
+    margin: 0;
+    padding: 0;
+}
+
+/* ===== Navbar ===== */
+.site-navbar {
+    background-color: #fff;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.site-navbar .nav-container {
+    position: relative;
+    display: flex;
+    justify-content: center; /* menu nằm giữa */
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 12px 40px;
+}
+
+/* Logo trái */
+.logo {
+    position: absolute;
+    left: 40px;
+    font-size: 26px;
+    font-weight: bold;
+    color: #007bff;
+    text-decoration: none;
+}
+
+/* Menu giữa */
+.nav-links {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-links a {
+    color: #000;
+    font-weight: 500;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.nav-links a:hover {
+    color: #007bff;
+}
+
+/* User phải */
+.auth-section {
+    position: absolute;
+    right: 40px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Dropdown */
+.dropdown {
+    position: relative;
+}
+
+.dropdown-btn {
+    background-color: #007bff;
+    color: #fff;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.dropdown-btn:hover {
+    background-color: #0056b3;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 40px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    min-width: 160px;
+    z-index: 2000;
+}
+
+.dropdown-content a,
+.dropdown-content button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    text-align: left;
+    color: #333;
+    background: none;
+    border: none;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.dropdown-content a:hover,
+.dropdown-content button:hover {
+    background-color: #f1f1f1;
+}
+
+.dropdown-content.show {
+    display: block;
+}
+
+/* ===== Main Content ===== */
+.main-content {
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 0 20px;
+}
+
+/* ===== Footer ===== */
+.footer {
+    background-color: #111827;
+    color: #fff;
+    text-align: center;
+    padding: 20px 0;
+    margin-top: 40px;
+    font-size: 14px;
+}

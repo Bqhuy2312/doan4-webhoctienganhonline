@@ -4,27 +4,45 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use App\Models\User; // ✅ thêm để IDE hiểu
+use Illuminate\Support\Facades\Storage;
+use App\Models\User;
 
 class ProfileController extends Controller
 {
-    // Hiển thị hồ sơ
-    public function show()
+    /**
+     * Hiển thị trang hồ sơ cá nhân
+     */
+    public function index()
     {
-        /** @var User $user */   // ✅ chú thích cho VSCode hiểu user là model User
-        $user = auth()->user()->load('courses');
+        /** @var User $user */
+        $user = auth()->user()->load('courses'); // nếu user có khóa học
         return view('user.profile', compact('user'));
     }
 
-    // Cập nhật hồ sơ
+    /**
+     * Cập nhật thông tin hồ sơ
+     */
     public function update(Request $request)
     {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
         /** @var User $user */
         $user = auth()->user();
 
+        // Cập nhật tên
         $user->name = $request->name;
 
+        // Cập nhật avatar (nếu có)
         if ($request->hasFile('avatar')) {
+            // Xóa avatar cũ nếu có
+            if ($user->avatar && Storage::disk('public')->exists(str_replace('/storage/', '', $user->avatar))) {
+                Storage::disk('public')->delete(str_replace('/storage/', '', $user->avatar));
+            }
+
+            // Lưu avatar mới
             $path = $request->file('avatar')->store('avatars', 'public');
             $user->avatar = '/storage/' . $path;
         }
@@ -34,7 +52,9 @@ class ProfileController extends Controller
         return back()->with('success', 'Cập nhật hồ sơ thành công!');
     }
 
-    // Đổi mật khẩu
+    /**
+     * Đổi mật khẩu người dùng
+     */
     public function changePassword(Request $request)
     {
         $request->validate([
@@ -45,10 +65,12 @@ class ProfileController extends Controller
         /** @var User $user */
         $user = auth()->user();
 
+        // Kiểm tra mật khẩu hiện tại
         if (!Hash::check($request->current_password, $user->password)) {
             return back()->withErrors(['current_password' => 'Mật khẩu hiện tại không đúng']);
         }
 
+        // Cập nhật mật khẩu mới
         $user->password = Hash::make($request->new_password);
         $user->save();
 

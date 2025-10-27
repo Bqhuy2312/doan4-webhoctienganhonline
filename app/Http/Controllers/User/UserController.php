@@ -18,28 +18,8 @@ class UserController extends Controller
 
         return view('user.homepage', compact('courses'));
     }
-
-    // =================== DANH SÁCH KHÓA HỌC =================== //
-    public function courses(Request $request)
-    {
-        $query = Course::where('is_active', true);
-
-        if ($request->has('search')) {
-            $query->where('title', 'like', '%' . $request->search . '%');
-        }
-
-        $courses = $query->paginate(9);
-
-        return view('user.courses', compact('courses'));
-    }
-
-    // =================== CHI TIẾT KHÓA HỌC =================== //
-    public function courseDetail($id)
-    {
-        $course = Course::with('sections.lessons')->findOrFail($id);
-
-        return view('user.course_detail', compact('course'));
-    }
+// admin user
+    
 
     // =================== HỒ SƠ CÁ NHÂN =================== //
     public function profile()
