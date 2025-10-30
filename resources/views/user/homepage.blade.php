@@ -2,24 +2,26 @@
 
 @section('title', 'Trang chủ')
 
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('css/user/homepage.css') }}">
+@endpush
+
 @section('content')
-<!-- Banner -->
-<div class="bg-blue-600 text-white text-center py-20 rounded-xl shadow-lg">
-    <h1 class="text-4xl font-bold">Học tiếng Anh mọi lúc, mọi nơi</h1>
-    <p class="mt-4 text-lg">Khóa học online với video, tài liệu và quiz</p>
-    <a href="{{ route('user.courses') }}" class="mt-6 inline-block bg-white text-blue-600 font-semibold px-6 py-2 rounded-lg">Xem khóa học</a>
+<div class="hero-banner">
+    <h1>Học tiếng Anh mọi lúc, mọi nơi</h1>
+    <p>Khóa học online với video, tài liệu và quiz</p>
+    <a href="{{ route('user.courses') }}" class="cta-button">Xem khóa học</a>
 </div>
 
-<!-- Khóa học nổi bật -->
-<div class="mt-12">
-    <h2 class="text-2xl font-bold mb-6">Khóa học nổi bật</h2>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="featured-courses">
+    <h2 class="section-title">Khóa học nổi bật</h2>
+    <div class="course-grid">
         @foreach($courses as $course)
-            <div class="bg-white rounded-lg shadow p-4">
-                <img src="{{ $course->thumbnail }}" alt="thumbnail" class="rounded-md mb-3">
-                <h3 class="font-semibold text-lg">{{ $course->title }}</h3>
-                <p class="text-gray-600 text-sm">{{ Str::limit($course->description, 80) }}</p>
-                <a href="{{ route('user.course.detail', $course->id) }}" class="text-blue-500 font-semibold mt-2 inline-block">Xem chi tiết</a>
+            <div class="course-card">
+                <img src="{{ $course->thumbnail_url ? asset('storage/' . $course->thumbnail_url) : 'https://via.placeholder.com/300x200' }}" alt="thumbnail">
+                <h3>{{ $course->title }}</h3>
+                <p>{{ Str::limit($course->description, 80) }}</p>
+                <a href="{{ route('user.course.detail', $course->id) }}" class="detail-link">Xem chi tiết</a>
             </div>
         @endforeach
     </div>

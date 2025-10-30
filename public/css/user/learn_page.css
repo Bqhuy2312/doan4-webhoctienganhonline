@@ -1,0 +1,169 @@
+.learn-container {
+    display: flex;
+    gap: 2rem;
+}
+
+/* Sidebar bên trái */
+.learn-sidebar {
+    flex-basis: 350px;
+    min-width: 300px;
+    height: 80vh; /* Chiều cao cố định */
+    overflow-y: auto; /* Cho phép cuộn */
+    position: sticky;
+    top: 100px;
+}
+.sidebar-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+}
+
+/* Nội dung chính bên phải */
+.learn-content {
+    flex: 1;
+}
+
+/* Tùy chỉnh lại style bài học cho sidebar */
+.learn-sidebar .lesson-item {
+    padding: 0;
+}
+.learn-sidebar .lesson-item a {
+    display: flex;
+    align-items: center;
+    padding: 0.85rem 1.5rem;
+    text-decoration: none;
+    border-bottom: 1px solid #f0f0f0;
+}
+.learn-sidebar .lesson-item a:hover {
+    background-color: #f8f9fa;
+}
+.learn-sidebar .lesson-item.active a {
+    background-color: #e9f2ff;
+    border-left: 4px solid #007bff;
+    padding-left: calc(1.5rem - 4px);
+}
+.learn-sidebar .lesson-item.active .lesson-title {
+    font-weight: 600;
+}
+
+/* Nội dung bài học */
+.lesson-header {
+    padding: 1.5rem;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    margin-bottom: 2rem;
+}
+.lesson-header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0;
+}
+.lesson-body {
+    padding: 1.5rem;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+.video-container {
+    background: #000;
+    border-radius: 8px;
+    overflow: hidden;
+}
+.pdf-container iframe {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+.download-pdf {
+    display: inline-block;
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+}
+.quiz-container {
+    padding: 1rem;
+}
+
+.quiz-question {
+    background-color: #f8f9fa;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.quiz-question .question-text {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+}
+
+.quiz-options {
+    list-style: none;
+    padding-left: 0;
+}
+
+.quiz-option {
+    margin-bottom: 0.75rem;
+}
+
+.quiz-option input[type="radio"] {
+    margin-right: 0.5rem;
+}
+
+.quiz-option label {
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.submit-quiz-btn {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+.submit-quiz-btn:hover {
+    background-color: #218838;
+}
+
+.quiz-result {
+    border: 2px solid #28a745;
+    background-color: #f0fff4;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+.quiz-result h3 {
+    margin-top: 0;
+    font-size: 1.5rem;
+}
+.quiz-result .score {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #28a745;
+}
+.retry-quiz-btn {
+    display: inline-block;
+    margin-top: 1rem;
+    padding: 0.5rem 1.5rem;
+    background-color: #007bff; /* Màu xanh dương */
+    color: #fff;
+    text-decoration: none;
+    border: none;
+    border-radius: 5px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+.retry-quiz-btn:hover {
+    background-color: #0056b3;
+}

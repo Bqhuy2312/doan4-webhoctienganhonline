@@ -36,7 +36,7 @@
             <tbody>
                 @forelse ($allStudents as $student)
                     <tr>
-                        <td class="student-name">{{ $student->name }}</td>
+                        <td class="student-name">{{ $student->last_name }} {{ $student->first_name }}</td>
                         <td>{{ $student->email }}</td>
                         <td>{{ $student->created_at->format('d/m/Y') }}</td>
                         <td>

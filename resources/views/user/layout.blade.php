@@ -7,6 +7,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- CSS của bạn đặt SAU để ghi đè -->
     <link rel="stylesheet" href="{{ asset('css/user/app.css') }}">
+    @stack('styles')
 </head>
 <body>
 
@@ -20,7 +21,7 @@
             <ul class="nav-links">
                 <li><a href="{{ route('user.home') }}">Trang chủ</a></li>
                 <li><a href="{{ route('user.courses') }}">Khóa học</a></li>
-                <li><a href="{{ route('user.quiz') }}">Quiz</a></li>
+                <li><a href="{{ route('user.my_courses') }}">Khóa học của tôi</a></li>
                 <li><a href="{{ route('user.chat') }}">Hỗ trợ</a></li>
             </ul>
 
@@ -63,5 +64,6 @@
             document.getElementById("dropdownMenu").classList.toggle("show");
         }
     </script>
+    @stack('scripts')
 </body>
 </html>

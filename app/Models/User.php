@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class User extends Authenticatable
 {
@@ -22,6 +23,7 @@ class User extends Authenticatable
         'first_name',
         'last_name',
         'email',
+        'avatar',
         'password',
         'role',
     ];
@@ -51,9 +53,10 @@ class User extends Authenticatable
     }
 
     public function courses()
-
     {
-        return $this->belongsToMany(Course::class, 'enrollments');
+        return $this->belongsToMany(Course::class, 'enrollments')
+                    ->withPivot('progress', 'last_viewed_lesson_id')
+                    ->withTimestamps();
     }
 
     public function enrollments()
@@ -70,5 +73,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(Message::class, 'sender_id');
     }
-    
+
+    protected function coursesEnrolled(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => $this->enrollments()->count()
+        );
+    }
+
 }

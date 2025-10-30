@@ -1,0 +1,202 @@
+/* ===== LAYOUT 2 CỘT ===== */
+.course-detail-container {
+    display: flex;
+    flex-wrap: wrap; /* Cho phép xuống dòng trên di động */
+    gap: 2rem;
+}
+
+/* Cột trái (Nội dung) */
+.course-content {
+    flex: 1;
+    min-width: 65%; /* Chiếm phần lớn không gian */
+}
+
+/* Cột phải (Sidebar) */
+.course-sidebar {
+    flex-basis: 300px; /* Độ rộng cố định cho sidebar */
+    min-width: 300px;
+    flex-grow: 1;
+    position: sticky;
+    top: 100px; /* 100px tính từ top, sau khi trừ navbar */
+}
+
+/* ===== CỘT TRÁI: NỘI DUNG KHÓA HỌC ===== */
+
+/* Thông tin mô tả ở đầu */
+.course-header {
+    background-color: #fff;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    margin-bottom: 2rem;
+}
+
+.course-header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.course-header p {
+    font-size: 1rem;
+    color: #555;
+    line-height: 1.6;
+}
+
+.curriculum-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+}
+
+/* Khung chứa mỗi chương */
+.section-item {
+    background-color: #fff;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+    overflow: hidden; 
+}
+
+/* 1. Header của chương (làm cho nó giống 1 cái nút) */
+.section-header {
+    background-color: #f8f9fa;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid #e0e0e0;
+    cursor: pointer; /* Biến con trỏ thành hình bàn tay */
+    position: relative; /* Cần thiết để định vị mũi tên */
+    transition: background-color 0.2s ease;
+}
+
+.section-header:hover {
+    background-color: #f1f1f1;
+}
+
+.section-header h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0;
+    /* Tạo khoảng trống cho mũi tên */
+    padding-right: 20px; 
+}
+
+/* 2. Mũi tên dropdown */
+.section-header::after {
+    content: '▼'; /* Ký tự mũi tên xuống */
+    font-size: 0.8em;
+    font-weight: bold;
+    color: #555;
+    position: absolute;
+    right: 1.5rem; /* Đặt ở góc phải */
+    top: 50%;
+    transform: translateY(-50%);
+    transition: transform 0.2s ease; /* Hiệu ứng xoay */
+}
+
+/* 3. Khi active (đang mở), xoay mũi tên lên */
+.section-header.active::after {
+    transform: translateY(-50%) rotate(180deg);
+}
+
+/* 4. Danh sách bài học (ẩn đi mặc định) */
+.lesson-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: none; /* Ẩn đi */
+    border-top: 1px solid #e0e0e0; /* Thêm đường kẻ mờ khi mở ra */
+}
+
+/* 5. Lớp 'show' (dùng JS để thêm vào) sẽ hiện danh sách lên */
+.lesson-list.show {
+    display: block;
+}
+
+/* * (CẬP NHẬT) Sửa lại style cho lesson-item
+ */
+.lesson-item {
+    display: flex;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid #f0f0f0;
+    background-color: #fff; /* Nền trắng cho các bài học */
+}
+
+.lesson-item:last-child {
+    border-bottom: none;
+}
+
+.lesson-icon {
+    font-size: 1.1rem;
+    margin-right: 1rem;
+    width: 20px;
+    text-align: center;
+}
+.icon-video { color: #007bff; }
+.icon-pdf { color: #dc3545; }
+.icon-quiz { color: #28a745; }
+
+.lesson-title {
+    font-size: 0.95rem;
+    color: #333;
+}
+
+/* ===== CỘT PHẢI: THÔNG TIN ĐĂNG KÝ ===== */
+
+.info-card {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    border: 1px solid #e0e0e0;
+    overflow: hidden; /* Bo góc ảnh */
+}
+
+.info-card-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.info-card-body {
+    padding: 1.5rem;
+}
+
+.course-price {
+    font-size: 2.25rem;
+    font-weight: 700;
+    color: #007bff;
+    margin-bottom: 1rem;
+}
+
+.course-price .free {
+    color: #28a745; /* Màu xanh lá cho "Miễn phí" */
+}
+
+.enroll-button {
+    display: block;
+    width: 100%;
+    background-color: #dc3545;
+    color: #fff;
+    padding: 0.75rem;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+}
+
+.enroll-button:hover {
+    background-color: #c82333;
+}
+
+.continue-learning-btn {
+    background-color: #28a745;
+    text-align: center;
+}
+
+.continue-learning-btn:hover {
+    background-color: #218838;
+}

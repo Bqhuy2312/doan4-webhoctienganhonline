@@ -1,10 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\User;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rules\File;
+use App\Http\Controllers\Controller;
 use App\Models\User;
 
 class ProfileController extends Controller
@@ -24,29 +27,38 @@ class ProfileController extends Controller
      */
     public function update(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        $user = Auth::user();
+
+        // 1. Validate dữ liệu
+        $validatedData = $request->validate([
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'avatar' => [
+                'nullable', // Avatar không bắt buộc
+                File::image() // Chỉ chấp nhận file ảnh
+                    ->max(2048) // Tối đa 2MB
+            ],
         ]);
 
-        /** @var User $user */
-        $user = auth()->user();
-
-        // Cập nhật tên
-        $user->name = $request->name;
-
-        // Cập nhật avatar (nếu có)
+        // 2. Xử lý upload Avatar (Nếu có file mới)
         if ($request->hasFile('avatar')) {
-            // Xóa avatar cũ nếu có
-            if ($user->avatar && Storage::disk('public')->exists(str_replace('/storage/', '', $user->avatar))) {
-                Storage::disk('public')->delete(str_replace('/storage/', '', $user->avatar));
+
+            // Xóa avatar cũ (nếu có) để tiết kiệm dung lượng
+            if ($user->avatar) {
+                Storage::disk('public')->delete($user->avatar);
             }
 
-            // Lưu avatar mới
+            // Lưu file mới vào 'storage/app/public/avatars'
+            // và lấy đường dẫn lưu vào CSDL
             $path = $request->file('avatar')->store('avatars', 'public');
-            $user->avatar = '/storage/' . $path;
+            $user->avatar = $path;
         }
 
+        // 3. Cập nhật các thông tin khác
+        $user->first_name = $validatedData['first_name'];
+        $user->last_name = $validatedData['last_name'];
+
+        // 4. Lưu lại
         $user->save();
 
         return back()->with('success', 'Cập nhật hồ sơ thành công!');

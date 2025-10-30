@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Course;
+use App\Models\Enrollment;
+use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
@@ -16,13 +18,13 @@ class DashboardController extends Controller
         $activeCourses = Course::where('is_active', true)->count();
 
         $newStudentsThisWeek = User::where('role', 'user')
-                                    ->where('created_at', '>=', now()->subWeek())
-                                    ->count();
+            ->where('created_at', '>=', now()->subWeek())
+            ->count();
 
         $topCourses = Course::withCount('students')
-                              ->orderBy('students_count', 'desc')
-                              ->take(6)
-                              ->get();
+            ->orderBy('students_count', 'desc')
+            ->take(6)
+            ->get();
 
         $studentsPerCourseData = [
 
@@ -30,10 +32,20 @@ class DashboardController extends Controller
             'values' => $topCourses->pluck('students_count')
         ];
 
-        // 2. Biểu đồ tròn: Tỷ lệ hoàn thành (hiện tại dùng dữ liệu giả)
+        $completionStats = Enrollment::select(
+            DB::raw('COUNT(CASE WHEN progress = 100 THEN 1 END) as completed'),
+            DB::raw('COUNT(CASE WHEN progress > 0 AND progress < 100 THEN 1 END) as in_progress'),
+            DB::raw('COUNT(CASE WHEN progress = 0 THEN 1 END) as not_started')
+        )
+            ->first();
+
         $completionRateData = [
             'labels' => ['Đã hoàn thành', 'Đang học', 'Chưa bắt đầu'],
-            'values' => [65, 25, 10]
+            'values' => [
+                $completionStats->completed,
+                $completionStats->in_progress,
+                $completionStats->not_started
+            ]
         ];
 
         return view('admin.dashboard', compact(

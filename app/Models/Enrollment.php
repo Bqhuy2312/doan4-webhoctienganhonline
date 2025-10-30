@@ -15,6 +15,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $id
  * @property int $user_id
  * @property int $course_id
+ * @property int $progress
+ * @property int|null $last_viewed_lesson_id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * 

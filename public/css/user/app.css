@@ -1,48 +1,45 @@
-/* ===== Tổng thể ===== */
+/* ===== CÀI ĐẶT TỔNG THỂ ===== */
 body {
     font-family: 'Segoe UI', Arial, sans-serif;
-    background-color: #f8f9fa;
-    color: #000;
+    background-color: #f8f9fa; /* Màu nền xám nhạt */
+    color: #000; /* Màu chữ đen */
     margin: 0;
     padding: 0;
 }
 
-/* ===== Navbar ===== */
+/* ===== NAVBAR CHÍNH ===== */
 .site-navbar {
-    background-color: #fff;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    background-color: #fff; /* Nền trắng */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ */
     position: sticky;
     top: 0;
     z-index: 1000;
 }
 
-.site-navbar .nav-container {
-    position: relative;
+.nav-container {
     display: flex;
-    justify-content: center; /* menu nằm giữa */
+    justify-content: space-between; /* Căn 3 cột: trái, giữa, phải */
     align-items: center;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 12px 40px;
+    max-width: 1200px; /* Chiều rộng tối đa */
+    margin: 0 auto; /* Căn giữa */
+    padding: 12px 40px; /* Đệm trên/dưới 12px, trái/phải 40px */
 }
 
-/* Logo trái */
+/* Logo (Cột trái) */
 .logo {
-    position: absolute;
-    left: 40px;
     font-size: 26px;
     font-weight: bold;
-    color: #007bff;
+    color: #007bff; /* Màu xanh dương */
     text-decoration: none;
 }
 
-/* Menu giữa */
+/* Menu (Cột giữa) */
 .nav-links {
     list-style: none;
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 30px;
+    gap: 30px; /* Khoảng cách giữa các mục menu */
     margin: 0;
     padding: 0;
 }
@@ -55,19 +52,49 @@ body {
 }
 
 .nav-links a:hover {
+    color: #007bff; /* Đổi màu xanh khi di chuột */
+}
+
+/* Nút xác thực (Cột phải) */
+.auth-section {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Khoảng cách giữa 2 nút */
+}
+
+.btn-login,
+.btn-register {
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 50px; /* Bo tròn */
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.btn-login {
+    /* Nút đăng nhập (kiểu viền) */
+    border: 1px solid #007bff;
     color: #007bff;
 }
 
-/* User phải */
-.auth-section {
-    position: absolute;
-    right: 40px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
+.btn-login:hover {
+    background-color: #007bff;
+    color: #fff;
 }
 
-/* Dropdown */
+.btn-register {
+    /* Nút đăng ký (kiểu nền) */
+    background-color: #007bff;
+    color: #fff;
+    border: 1px solid #007bff;
+}
+
+.btn-register:hover {
+    background-color: #0056b3; /* Màu xanh đậm hơn */
+    border-color: #0056b3;
+}
+
+/* ===== DROPDOWN USER (KHI ĐÃ ĐĂNG NHẬP) ===== */
 .dropdown {
     position: relative;
 }
@@ -80,21 +107,28 @@ body {
     border-radius: 50px;
     cursor: pointer;
     font-weight: 500;
+    display: flex; /* Để căn chỉnh mũi tên */
+    align-items: center;
 }
 
 .dropdown-btn:hover {
     background-color: #0056b3;
 }
 
+.dropdown-btn .arrow {
+    margin-left: 8px;
+    font-size: 0.7em;
+}
+
 .dropdown-content {
-    display: none;
+    display: none; /* Mặc định ẩn */
     position: absolute;
     right: 0;
-    top: 40px;
+    top: 40px; /* Hiện ngay dưới nút */
     background-color: #fff;
     border: 1px solid #ddd;
     border-radius: 6px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     min-width: 160px;
     z-index: 2000;
 }
@@ -110,6 +144,7 @@ body {
     border: none;
     text-decoration: none;
     cursor: pointer;
+    box-sizing: border-box; /* Quan trọng để padding không làm hỏng width */
 }
 
 .dropdown-content a:hover,
@@ -117,20 +152,21 @@ body {
     background-color: #f1f1f1;
 }
 
+/* Lớp JavaScript dùng để hiện dropdown */
 .dropdown-content.show {
     display: block;
 }
 
-/* ===== Main Content ===== */
+/* ===== NỘI DUNG CHÍNH VÀ FOOTER ===== */
 .main-content {
     max-width: 1200px;
     margin: 30px auto;
     padding: 0 20px;
+    min-height: 70vh; /* Giúp footer luôn nằm gần cuối trang */
 }
 
-/* ===== Footer ===== */
 .footer {
-    background-color: #111827;
+    background-color: #111827; /* Màu nền đen xám */
     color: #fff;
     text-align: center;
     padding: 20px 0;

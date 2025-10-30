@@ -36,7 +36,7 @@
                             </div>
                         </td>
                         <td>{{ $course->created_at->format('d/m/Y') }}</td>
-                        <td>{{ $course->students_count }}</td>
+                        <td>{{ $course->students_count }} / {{ $course->student_limit }}</td>
                         <td>
                             @if ($course->is_active)
                                 <span class="status-badge status-active">Hoạt động</span>

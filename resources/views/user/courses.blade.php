@@ -2,52 +2,54 @@
 
 @section('title', 'Danh sách khóa học')
 
-@section('content')
-<h2 class="text-2xl font-bold mb-6">Danh sách khóa học</h2>
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('css/user/courses.css') }}">
+@endpush
 
-<!-- Search + Filter -->
-<div class="flex space-x-3 mb-4">
-    <form method="GET" class="flex space-x-2">
+@section('content')
+<h2 class="section-title">Danh sách khóa học</h2>
+
+<div class="filter-bar">
+    <form method="GET" class="filter-form">
         <input type="text" name="search" placeholder="Tìm khóa học..."
                value="{{ request('search') }}"
-               class="border px-3 py-2 rounded w-64">
+               class="search-input">
 
-        <select name="level" class="border px-3 py-2 rounded">
-            <option value="">-- Cấp bậc --</option>
-            @foreach($levels as $level)
-                <option value="{{ $level->id }}" {{ request('level') == $level->id ? 'selected' : '' }}>
-                    {{ $level->name }}
+        <select name="category_id" class="filter-select">
+            <option value="">-- Tất cả danh mục --</option>
+            @foreach($categories as $category)
+                <option value="{{ $category->id }}" {{ request('category_id') == $category->id ? 'selected' : '' }}>
+                    {{ $category->name }}
                 </option>
             @endforeach
         </select>
 
-        <button class="bg-blue-600 text-white px-4 py-2 rounded">Tìm</button>
+        <button type="submit" class="search-button">Tìm</button>
     </form>
 </div>
 
-<!-- Danh sách khóa học -->
-<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="course-grid">
     @forelse($courses as $course)
-        <div class="bg-white rounded-lg shadow p-4">
-            <img src="{{ $course->thumbnail_url ?? 'https://via.placeholder.com/300x200' }}" 
+        <div class="course-card">
+            <img src="{{ $course->thumbnail_url ? asset('storage/' . $course->thumbnail_url) : 'https://via.placeholder.com/300x200' }}" 
                  alt="{{ $course->title }}" 
-                 class="rounded-md mb-3 w-full h-40 object-cover">
+                 class="course-thumbnail">
 
-            <h3 class="font-semibold text-lg">{{ $course->title }}</h3>
+            <h3 class="course-title">{{ $course->title }}</h3>
 
-            <p class="text-sm text-gray-500 mb-1">
-                Cấp bậc: {{ $course->level->name ?? 'Chưa có cấp bậc' }}
+            <p class="course-meta">
+                Danh mục: {{ $course->category->name ?? 'Chưa có danh mục' }}
             </p>
 
-            <p class="text-gray-600 text-sm">{{ Str::limit($course->description, 80) }}</p>
+            <p class="course-description">{{ Str::limit($course->description, 80) }}</p>
 
             <a href="{{ route('user.course.detail', $course->id) }}" 
-               class="text-blue-500 font-semibold mt-2 inline-block">
+               class="course-link">
                 Xem chi tiết
             </a>
         </div>
     @empty
-        <p class="text-gray-500">Không tìm thấy khóa học nào.</p>
+        <p class="no-courses-message">Không tìm thấy khóa học nào.</p>
     @endforelse
 </div>
 @endsection

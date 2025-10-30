@@ -48,7 +48,7 @@
                         @elseif ($lesson->type == 'pdf')
                             <i class="fa-solid fa-file-lines lesson-icon icon-pdf"></i>
                         @elseif ($lesson->type == 'quiz')
-                            <i class="fa-solid fa-square-check lesson-icon icon-quiz"></i>
+                            <i class="fa-solid fa-question-circle lesson-icon icon-quiz"></i>
                         @endif
                         <span class="lesson-title">{{ $lesson->title }}</span>
                         <div class="lesson-actions">
