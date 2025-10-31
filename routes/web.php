@@ -64,7 +64,7 @@ Route::post('/forgot-password', function (Request $request) {
 // Trang chủ (cả "/" và "/user/home" đều về home)
 Route::get('/', [UserController::class, 'home'])->name('user.home');
 
-Route::prefix('user')->middleware('auth')->group(function () {
+Route::prefix('user')->middleware('auth:web')->group(function () {
     // Trang chính
     Route::get('/home', [UserController::class, 'home'])->name('user.home');
 
@@ -106,7 +106,7 @@ Route::prefix('admin')->group(function () {
     Route::post('/login', [adAuthController::class, 'login'])->name('admin.auth.login.submit');
 
 
-    Route::middleware(['auth'])->group(function () {
+    Route::middleware('auth:admin')->group(function () {
         // Logout
         Route::post('/logout', [adAuthController::class, 'logout'])->name('admin.auth.logout');
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');

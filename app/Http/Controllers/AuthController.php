@@ -20,7 +20,7 @@ class AuthController extends Controller
     {
         $credentials = $request->only('email', 'password');
 
-        if (Auth::attempt($credentials)) {
+         if (Auth::guard('web')->attempt(array_merge($credentials, ['role' => 'user']))) {
             $request->session()->regenerate();
             return redirect()->route('user.home');
         }
@@ -33,7 +33,7 @@ class AuthController extends Controller
     // Đăng xuất
     public function logout(Request $request)
     {
-        Auth::logout();
+        Auth::guard('web')->logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
@@ -61,9 +61,10 @@ class AuthController extends Controller
         'last_name'  => $request->last_name,
         'email'      => $request->email,
         'password'   => Hash::make($request->password),
+        'role'       => 'user',
     ]);
 
-    Auth::login($user);
+    Auth::guard('web')->login($user);
 
     return redirect()->route('user.home');
 }

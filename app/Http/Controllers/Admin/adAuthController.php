@@ -20,10 +20,9 @@ class adAuthController extends Controller
             'password' => 'required'
         ]);
 
-        if (Auth::attempt(array_merge($credentials, ['role' => 'admin']))) {
+        if (Auth::guard('admin')->attempt(array_merge($credentials, ['role' => 'admin']))) {
             $request->session()->regenerate();
-
-            return view('admin.dashboard');
+            return redirect()->route('admin.dashboard');
         }
 
         return back()->withErrors([
@@ -33,9 +32,10 @@ class adAuthController extends Controller
 
     public function logout(Request $request)
     {
-        Auth::logout();
+        Auth::guard('admin')->logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect('/admin');
+
+        return redirect()->route('admin.login');
     }
 }
