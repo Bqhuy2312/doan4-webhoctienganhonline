@@ -41,7 +41,7 @@ function openEditLessonModal(lesson) {
         modalId = "editVideoModal";
         formId = "editVideoForm";
         document.getElementById("edit_video_title").value = lesson.title;
-        document.getElementById("edit_video_url").value = lesson.video_url;
+        document.getElementById("edit_video_path").value = lesson.video_path;
     } else if (lesson.type === "pdf") {
         modalId = "editPdfModal";
         formId = "editPdfForm";

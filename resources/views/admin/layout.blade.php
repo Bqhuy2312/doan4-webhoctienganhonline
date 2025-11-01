@@ -142,9 +142,48 @@
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="{{ asset('js/app.js') }}"></script> 
-    
+
+    @vite(['resources/js/app.js'])
+
     @stack('scripts')
+
+    @auth('admin')
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const adminId = document.body.dataset.authUserId;
+
+                const notiCountEl = document.getElementById('notification-count');
+                const notiListEl = document.getElementById('notification-items');
+
+                window.Echo.private('App.Models.User.' + adminId)
+                    .listen('NewNotification', (e) => {
+
+                        console.log('Thông báo mới:', e.notification);
+
+                        alert('Thông báo mới: ' + e.notification.message);
+
+                        notiCountEl.style.display = 'block';
+                        let currentCount = parseInt(notiCountEl.innerText || 0);
+                        notiCountEl.innerText = currentCount + 1;
+
+                        const noNoti = notiListEl.querySelector('.text-muted');
+                        if (noNoti) {
+                            noNoti.remove();
+                        }
+
+                        const newNotiLink = document.createElement('a');
+                        newNotiLink.href = e.notification.url;
+                        newNotiLink.classList.add('dropdown-item');
+                        newNotiLink.innerHTML = `
+                            <i class="fa-solid fa-users mr-2"></i> ${e.notification.message}
+                            <span class="float-right text-muted text-sm">vừa xong</span>
+                        `;
+
+                        notiListEl.prepend(newNotiLink);
+                    });
+            });
+        </script>
+    @endauth
 </body>
 
 </html>

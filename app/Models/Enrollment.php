@@ -37,6 +37,8 @@ class Enrollment extends Model
 	protected $fillable = [
 		'user_id',
 		'course_id',
+		'progress',
+		'last_viewed_lesson_id',
 	];
 
 	public function course()

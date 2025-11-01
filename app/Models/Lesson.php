@@ -42,7 +42,7 @@ class Lesson extends Model
 		'course_id',
 		'title',
 		'type',
-		'video_url',
+		'video_path',
 		'pdf_path',
 		'quiz_id',
 		'section_id'

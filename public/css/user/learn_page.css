@@ -1,70 +1,146 @@
+body {
+    background-color: #f4f7f9;
+}
 .learn-container {
     display: flex;
     gap: 2rem;
 }
 
-/* Sidebar bên trái */
 .learn-sidebar {
     flex-basis: 350px;
     min-width: 300px;
-    height: 80vh; /* Chiều cao cố định */
-    overflow-y: auto; /* Cho phép cuộn */
+    height: calc(100vh - 120px);
+    overflow-y: auto;
     position: sticky;
     top: 100px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    padding: 1rem;
 }
+
 .sidebar-title {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     font-weight: 600;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
+    padding: 0.5rem;
 }
 
-/* Nội dung chính bên phải */
-.learn-content {
-    flex: 1;
+.section-header {
+    background-color: #ffffff;
+    padding: 0.85rem 1rem;
+    border-radius: 8px;
+    margin-top: 1rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color 0.2s;
+}
+.section-header:hover {
+    background-color: #f1f3f5;
+}
+.section-header h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0;
 }
 
-/* Tùy chỉnh lại style bài học cho sidebar */
+.section-header::after {
+    content: '\f078';
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    font-size: 0.8rem;
+    transition: transform 0.3s ease;
+}
+.section-header.active::after {
+    transform: rotate(180deg);
+}
+
+.lesson-list {
+    list-style: none;
+    padding-left: 0;
+    margin-top: 0.5rem;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+}
+.lesson-list.show {
+    max-height: 1000px;
+}
+
 .learn-sidebar .lesson-item {
     padding: 0;
 }
 .learn-sidebar .lesson-item a {
     display: flex;
     align-items: center;
-    padding: 0.85rem 1.5rem;
+    padding: 0.75rem 1rem;
     text-decoration: none;
-    border-bottom: 1px solid #f0f0f0;
+    border-radius: 6px;
+    margin: 0.25rem 0;
+    color: #495057;
+    transition: background-color 0.2s, color 0.2s;
 }
 .learn-sidebar .lesson-item a:hover {
-    background-color: #f8f9fa;
+    background-color: #f1f3f5;
+    color: #212529;
 }
+
 .learn-sidebar .lesson-item.active a {
-    background-color: #e9f2ff;
-    border-left: 4px solid #007bff;
-    padding-left: calc(1.5rem - 4px);
+    background-color: #e7f5ff;
+    color: #0056b3;
+    border-left: none;
+    padding-left: 1rem;
+}
+
+.lesson-icon {
+    margin-right: 0.75rem;
+    width: 16px;
+    text-align: center;
+    opacity: 0.7;
+}
+.lesson-item.active .lesson-icon {
+    opacity: 1;
+}
+.lesson-title {
+    flex: 1;
+    font-size: 0.9rem;
 }
 .learn-sidebar .lesson-item.active .lesson-title {
     font-weight: 600;
 }
 
-/* Nội dung bài học */
-.lesson-header {
+.completed-icon {
+    color: #28a745;
+    margin-left: auto;
+    font-size: 0.9rem;
+}
+
+.lesson-item.completed a {
+    color: #6c757d;
+    opacity: 0.8;
+}
+.lesson-item.completed a:hover {
+    opacity: 1;
+}
+
+.learn-content {
+    flex: 1;
+}
+.lesson-header, .lesson-body {
     padding: 1.5rem;
     background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
     margin-bottom: 2rem;
 }
 .lesson-header h1 {
-    font-size: 2rem;
+    font-size: 1.75rem;
     font-weight: 700;
     margin: 0;
 }
-.lesson-body {
-    padding: 1.5rem;
-    background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-}
+
 .video-container {
     background: #000;
     border-radius: 8px;
@@ -73,6 +149,7 @@
 .pdf-container iframe {
     border: 1px solid #ddd;
     border-radius: 8px;
+    min-height: 80vh;
 }
 .download-pdf {
     display: inline-block;
@@ -83,55 +160,78 @@
     text-decoration: none;
     border-radius: 5px;
 }
+
 .quiz-container {
     padding: 1rem;
 }
-
 .quiz-question {
-    background-color: #f8f9fa;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
+    background-color: #fff;
+    border: 1px solid #e9ecef;
+    border-radius: 12px;
     padding: 1.5rem;
     margin-bottom: 1.5rem;
 }
-
 .quiz-question .question-text {
     font-size: 1.1rem;
     margin-bottom: 1rem;
 }
-
 .quiz-options {
     list-style: none;
     padding-left: 0;
+    margin-top: 1rem;
 }
-
 .quiz-option {
-    margin-bottom: 0.75rem;
-}
-
-.quiz-option input[type="radio"] {
-    margin-right: 0.5rem;
+    margin-bottom: 0.5rem;
 }
 
 .quiz-option label {
+    display: flex;
+    align-items: center;
     font-size: 1rem;
     cursor: pointer;
+    padding: 0.85rem 1.25rem;
+    border-radius: 8px;
+    border: 1px solid #eee;
+    transition: background-color 0.2s, border-color 0.2s;
+}
+.quiz-option label:hover {
+    background-color: #f8f9fa;
+}
+.quiz-option input[type="radio"] {
+    margin-right: 0.75rem;
+    transform: scale(1.1);
+    flex-shrink: 0;
+}
+.quiz-option input[type="radio"]:checked + label {
+    background-color: #e7f5ff;
+    border-color: #007bff;
+    font-weight: 500;
 }
 
-.submit-quiz-btn {
+.submit-quiz-btn, .retry-quiz-btn {
     display: inline-block;
     padding: 0.75rem 1.5rem;
-    background-color: #28a745;
     color: #fff;
     border: none;
     border-radius: 5px;
     font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
+    text-decoration: none;
     transition: background-color 0.2s;
+}
+.submit-quiz-btn {
+    background-color: #28a745;
 }
 .submit-quiz-btn:hover {
     background-color: #218838;
+}
+.retry-quiz-btn {
+    background-color: #007bff;
+    margin-top: 1rem;
+}
+.retry-quiz-btn:hover {
+    background-color: #0056b3;
 }
 
 .quiz-result {
@@ -150,20 +250,4 @@
     font-size: 1.25rem;
     font-weight: bold;
     color: #28a745;
-}
-.retry-quiz-btn {
-    display: inline-block;
-    margin-top: 1rem;
-    padding: 0.5rem 1.5rem;
-    background-color: #007bff; /* Màu xanh dương */
-    color: #fff;
-    text-decoration: none;
-    border: none;
-    border-radius: 5px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background-color 0.2s;
-}
-.retry-quiz-btn:hover {
-    background-color: #0056b3;
 }

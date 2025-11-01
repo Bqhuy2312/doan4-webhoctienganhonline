@@ -10,44 +10,32 @@ use App\Models\Category;
 
 class CourseController extends Controller
 {
-    /**
-     * Hiển thị danh sách khóa học
-     */
     public function courses(Request $request)
     {
         $query = Course::query()->where('is_active', true);
 
-        // Tìm kiếm theo tên khóa học
         if ($request->filled('search')) {
             $query->where('title', 'like', '%' . $request->search . '%');
         }
 
-        // Lọc theo danh mục
         if ($request->filled('category_id')) {
             $query->where('category_id', $request->category_id);
         }
 
-        // Lấy danh mục và danh sách khóa học (phân trang)
         $categories = Category::all();
         $courses = $query->paginate(9);
 
         return view('user.courses', compact('courses', 'categories'));
     }
 
-    /**
-     * Hiển thị chi tiết khóa học
-     */
     public function courseDetail(Course $course)
     {
-        // Kiểm tra trạng thái hoạt động của khóa học
         if (!$course->is_active) {
             abort(404);
         }
 
-        // Nạp thêm quan hệ để hiển thị đầy đủ thông tin
         $course->load(['sections.lessons', 'category']);
 
-        // Kiểm tra người dùng đã đăng ký khóa học hay chưa
         $isEnrolled = false;
         if (Auth::check()) {
             $isEnrolled = Auth::user()
@@ -56,6 +44,12 @@ class CourseController extends Controller
                 ->exists();
         }
 
-        return view('user.course_detail', compact('course', 'isEnrolled'));
+        $isFull = false;
+        if ($course->student_limit > 0) {
+            $currentEnrollments = $course->enrollments()->count();
+            $isFull = ($currentEnrollments >= $course->student_limit);
+        }
+
+        return view('user.course_detail', compact('course', 'isEnrolled', 'isFull'));
     }
 }

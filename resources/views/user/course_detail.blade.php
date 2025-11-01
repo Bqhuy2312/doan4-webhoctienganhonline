@@ -67,11 +67,15 @@
                     @endif
                 </div>
 
-                {{-- TODO: Cần kiểm tra xem user đã đăng ký khóa này chưa --}}
+                {{-- Kiểm tra xem user đã đăng ký khóa này chưa --}}
                 @if ($isEnrolled)
                     <a href="{{ route('user.resume', $course->id) }}" class="enroll-button continue-learning-btn">
                         Tiếp tục học
                     </a>
+                @elseif ($isFull)
+                    <button type="button" class="enroll-button" disabled style="background-color: #6c757d; cursor: not-allowed;">
+                        Đã hết chỗ
+                    </button>
                 @else
                     <form action="{{ route('user.enroll', $course->id) }}" method="POST">
                         @csrf
@@ -83,6 +87,7 @@
                 <ul>
                     <li>Danh mục: {{ $course->category->name }}</li>
                     <li>Số lượng bài học: {{ $course->lessons->count() }}</li>
+                    <li>Số suất học viên: {{ $course->student_limit }}</li>
                 </ul>
             </div>
         </div>

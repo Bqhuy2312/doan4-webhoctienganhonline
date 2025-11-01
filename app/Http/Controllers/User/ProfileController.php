@@ -18,7 +18,7 @@ class ProfileController extends Controller
     public function index()
     {
         /** @var User $user */
-        $user = auth()->user()->load('courses'); // nếu user có khóa học
+        $user = auth()->user()->load('courses');
         return view('user.profile', compact('user'));
     }
 

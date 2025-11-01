@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 // ==== USER CONTROLLERS ==== //
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\User\ProfileController;
 use App\Http\Controllers\User\CourseController;
 use App\Http\Controllers\User\EnrollmentController;
@@ -40,8 +41,9 @@ Route::post('/register', [AuthController::class, 'register'])->name('register.su
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.submit');
 
-// Đăng xuất
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+// Đăng nhập với Google
+Route::get('auth/google', [GoogleController::class, 'redirectToGoogle'])->name('google.login');
+Route::get('auth/google/callback', [GoogleController::class, 'handleGoogleCallback']);
 
 // Quên mật khẩu
 Route::get('/forgot-password', function () {
@@ -65,6 +67,9 @@ Route::post('/forgot-password', function (Request $request) {
 Route::get('/', [UserController::class, 'home'])->name('user.home');
 
 Route::prefix('user')->middleware('auth:web')->group(function () {
+    // Đăng xuất
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
     // Trang chính
     Route::get('/home', [UserController::class, 'home'])->name('user.home');
 

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <title>@yield('title', 'Học Tiếng Anh Online')</title>
@@ -9,6 +10,7 @@
     <link rel="stylesheet" href="{{ asset('css/user/app.css') }}">
     @stack('styles')
 </head>
+
 <body>
 
     <!-- Navbar -->
@@ -30,6 +32,7 @@
                 @if(Auth::check())
                     <div class="dropdown">
                         <button onclick="toggleDropdown()" class="dropdown-btn">
+                            <img src="{{ Auth::user()->avatar ? asset('storage/' . Auth::user()->avatar) : asset('images/default-profile.png') }}" alt="Ảnh đại diện" class="avatar-image">
                             {{ Auth::user()->first_name }}
                             <span class="arrow">▼</span>
                         </button>
@@ -51,7 +54,32 @@
 
     <!-- Nội dung -->
     <main class="main-content">
+
+        <div class="alert-container" style="position: fixed; top: 80px; right: 20px; z-index: 9999; width: 350px;">
+            @if (session('success'))
+                <div class="alert alert-success" role="alert">
+                    {{ session('success') }}
+                    <button type="button" class="close-alert"
+                        onclick="this.parentElement.style.display='none';">&times;</button>
+                </div>
+            @endif
+
+            @if ($errors->any())
+                <div class="alert alert-danger" role="alert">
+                    <ul style="margin: 0; padding-left: 20px;">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                    <button type="button" class="close-alert"
+                        onclick="this.parentElement.style.display='none';">&times;</button>
+                </div>
+            @endif
+
+        </div>
+
         @yield('content')
+
     </main>
 
     <!-- Footer -->
@@ -59,11 +87,16 @@
         <p>&copy; {{ date('Y') }} E-Online. All rights reserved.</p>
     </footer>
 
+    @vite(['resources/js/app.js'])
+
+    @stack('scripts')
+
     <script>
         function toggleDropdown() {
             document.getElementById("dropdownMenu").classList.toggle("show");
         }
     </script>
-    @stack('scripts')
+
 </body>
+
 </html>

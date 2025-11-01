@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Đăng nhập</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body class="bg-gray-100 flex items-center justify-center h-screen">
     <div class="bg-white p-6 rounded shadow w-96">
@@ -29,6 +30,11 @@
 
             <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded">Đăng nhập</button>
         </form>
+
+        <div class="mt-4">
+            <a href="{{ route('google.login') }}" class="w-full inline-block bg-red-600 text-white py-2 rounded text-center">
+                <i class="fab fa-google"></i> Đăng nhập với Google
+            </a>
 
         <div class="text-sm text-center mt-4 space-y-2">
             <p>

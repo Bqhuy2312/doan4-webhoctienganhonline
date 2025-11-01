@@ -60,7 +60,7 @@
             <div class="lesson-body">
                 @if ($currentLesson->type == 'video')
                     <div class="video-container">
-                        <video controls width="100%" src="{{ asset('storage/' . $currentLesson->video_url) }}"
+                        <video controls width="100%" src="{{ asset('storage/' . $currentLesson->video_path) }}"
                             id="lesson-player">
                             Trình duyệt của bạn không hỗ trợ video.
                         </video>
@@ -73,23 +73,23 @@
                     </div>
 
                 @elseif ($currentLesson->type == 'quiz')
-                    <div class="quiz-container">
+                        <div class="quiz-container">
 
-                        @if ($latestAttempt && !$isRetry)
+                            @if ($latestAttempt && !$isRetry)
 
-                                <h3>Kết quả lần làm bài trước</h3>
-                                <p>Bạn đã trả lời đúng:
-                                    <strong>{{ $latestAttempt->correct_answers }} / {{ $latestAttempt->total_questions }}</strong>
-                                </p>
-                                <p class="score">Điểm số: {{ $latestAttempt->score }}%</p>
+                                    <h3>Kết quả lần làm bài trước</h3>
+                                    <p>Bạn đã trả lời đúng:
+                                        <strong>{{ $latestAttempt->correct_answers }} / {{ $latestAttempt->total_questions }}</strong>
+                                    </p>
+                                    <p class="score">Điểm số: {{ $latestAttempt->score }}%</p>
 
-                                <a href="{{ route('user.learn', ['course' => $course->id, 'lesson' => $currentLesson->id, 'retry' => true]) }}"
-                                    class="retry-quiz-btn">
-                                    Làm lại bài
-                                </a>
-                            </div>
+                                    <a href="{{ route('user.learn', ['course' => $course->id, 'lesson' => $currentLesson->id, 'retry' => true]) }}"
+                                        class="retry-quiz-btn">
+                                        Làm lại bài
+                                    </a>
+                                </div>
 
-                        @else
+                            @else
 
                             @if ($currentLesson->quiz)
                                 <form action="{{ route('user.quiz.submit', $currentLesson->quiz->id) }}" method="POST">
@@ -122,8 +122,8 @@
                         @endif
                     </div>
                 @endif
-            </div>
-        </main>
+    </div>
+    </main>
     </div>
 @endsection
 
@@ -132,56 +132,54 @@
         document.addEventListener('DOMContentLoaded', function () {
 
             var sectionHeaders = document.querySelectorAll('.section-header');
-
             sectionHeaders.forEach(function (header) {
                 header.addEventListener('click', function () {
-
                     this.classList.toggle('active');
-
                     var lessonList = this.nextElementSibling;
-
                     if (lessonList && lessonList.classList.contains('lesson-list')) {
                         lessonList.classList.toggle('show');
                     }
                 });
             });
 
-        });
 
-        const isCompleted = {{ isset($completedLessons[$currentLesson->id]) ? 'true' : 'false' }};
+            const isCompleted = {{ isset($completedLessons[$currentLesson->id]) ? 'true' : 'false' }};
 
-        if (!isCompleted) {
+            if (!isCompleted) {
 
-            function markLessonComplete() {
-                fetch("{{ route('user.lessons.complete', $currentLesson->id) }}", {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                        'Accept': 'application/json'
-                    }
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            console.log('Đã tự động đánh dấu hoàn thành!');
+                function markLessonComplete() {
+                    fetch("{{ route('user.lessons.complete', $currentLesson->id) }}", {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            'Accept': 'application/json'
                         }
                     })
-                    .catch(error => console.error('Lỗi:', error));
-            }
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                console.log('Đã tự động đánh dấu hoàn thành!');
+                            }
+                        })
+                        .catch(error => console.error('Lỗi:', error));
+                }
 
-            @if ($currentLesson->type == 'video')
-                const videoPlayer = document.getElementById('lesson-player');
-                videoPlayer.addEventListener('ended', function () {
-                    console.log('Video đã kết thúc.');
-                    markLessonComplete();
-                });
+                @if ($currentLesson->type == 'video')
+                    const videoPlayer = document.getElementById('lesson-player');
+                    if (videoPlayer) {
+                        videoPlayer.addEventListener('ended', function () {
+                            console.log('Video đã kết thúc.');
+                            markLessonComplete();
+                        });
+                    }
 
-            @elseif ($currentLesson->type == 'pdf')
-                document.addEventListener('DOMContentLoaded', function () {
+                @elseif ($currentLesson->type == 'pdf')
+
                     console.log('Trang PDF đã tải.');
                     markLessonComplete();
-                });
-            @endif
-        }
+                @endif
+            }
+
+        });
     </script>
 @endpush

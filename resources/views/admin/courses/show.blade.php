@@ -224,7 +224,7 @@
                 </div>
                 <div class="form-group">
                     <label>Tải lên file Video mới (tùy chọn)</label>
-                    <input type="file" name="video_file" accept="video/*">
+                    <input type="file" name="video_file" id="edit_video_path" accept="video/*">
                 </div>
                 <div class="form-actions">
                     <button type="button" class="btn btn-secondary" onclick="closeModal('editVideoModal')">Hủy</button>

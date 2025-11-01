@@ -11,10 +11,14 @@ use Illuminate\Support\Facades\Auth;
 
 class LearnController extends Controller
 {
-    public function show(Request $request, Course $course, Lesson $lesson) // <-- 3. Thêm Request
+    public function show(Request $request, Course $course, Lesson $lesson)
     {
         $user = Auth::user();
-        
+
+        Enrollment::where('user_id', $user->id)
+            ->where('course_id', $course->id)
+            ->update(['last_viewed_lesson_id' => $lesson->id]);
+
         $isRetry = $request->input('retry', false);
 
         $course->load('sections.lessons');
@@ -22,11 +26,11 @@ class LearnController extends Controller
         $latestAttempt = null;
         if ($lesson->type == 'quiz' && $lesson->quiz_id) {
             $lesson->load('quiz.questions.options');
-            
+
             $latestAttempt = QuizAttempt::where('user_id', $user->id)
-                                        ->where('quiz_id', $lesson->quiz_id)
-                                        ->latest()
-                                        ->first();
+                ->where('quiz_id', $lesson->quiz_id)
+                ->latest()
+                ->first();
         }
 
         $completedLessons = $user->completedLessons->pluck('id')->flip();
@@ -45,8 +49,8 @@ class LearnController extends Controller
         $user = Auth::user();
 
         $enrollment = Enrollment::where('user_id', $user->id)
-                                ->where('course_id', $course->id)
-                                ->firstOrFail();
+            ->where('course_id', $course->id)
+            ->firstOrFail();
 
         $lessonToResume = null;
 
@@ -61,7 +65,7 @@ class LearnController extends Controller
         if (!$lessonToResume) {
             return back()->withErrors(['error' => 'Khóa học này hiện chưa có nội dung.']);
         }
-        
+
         return redirect()->route('user.learn', ['course' => $course->id, 'lesson' => $lessonToResume->id]);
     }
 }

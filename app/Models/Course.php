@@ -64,8 +64,8 @@ class Course extends Model
 		return $this->belongsTo(Category::class);
 	}
 
-	public function level()
+	public function enrollments()
 {
-    return $this->belongsTo(Level::class);
+    return $this->hasMany(Enrollment::class);
 }
 }
