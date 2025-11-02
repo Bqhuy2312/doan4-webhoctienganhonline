@@ -35,6 +35,7 @@ class ChatController extends Controller
     public function fetchMessages(User $user)
     {
         $adminId = Auth::id();
+
         return Message::where(function ($q) use ($user, $adminId) {
             $q->where('sender_id', $adminId)->where('receiver_id', $user->id);
         })->orWhere(function ($q) use ($user, $adminId) {
@@ -49,7 +50,7 @@ class ChatController extends Controller
             'message' => $request->input('message')
         ]);
 
-        broadcast(new MessageSent($message))->toOthers();
+        broadcast(new MessageSent($message));
 
         return response()->json(['status' => 'Message Sent!']);
     }

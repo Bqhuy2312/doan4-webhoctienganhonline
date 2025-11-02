@@ -32,7 +32,7 @@ class adAuthController extends Controller
 
     public function logout(Request $request)
     {
-        Auth::guard('admin')->logout();
+        Auth::guard('auth:admin')->logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 

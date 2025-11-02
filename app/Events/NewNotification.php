@@ -1,7 +1,7 @@
 <?php
 namespace App\Events;
 use App\Models\Notification;
-use Illuminate\Broadcasting\PrivateChannel;
+use Illuminate\Broadcasting\Channel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
@@ -16,6 +16,6 @@ class NewNotification implements ShouldBroadcast
     }
     public function broadcastOn(): array
     {
-        return [new PrivateChannel('App.Models.User.' . $this->notification->user_id)];
+        return [new Channel('public-notification-channel')];
     }
 }

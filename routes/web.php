@@ -15,6 +15,7 @@ use App\Http\Controllers\User\LearnController;
 use App\Http\Controllers\User\MyCoursesController;
 use App\Http\Controllers\User\QuizAttemptController;
 use App\Http\Controllers\User\LessonCompletionController;
+use App\Http\Controllers\User\ChatController;
 
 // ==== ADMIN CONTROLLERS ==== //
 use App\Http\Controllers\Admin\adAuthController;
@@ -99,6 +100,13 @@ Route::prefix('user')->middleware('auth:web')->group(function () {
     Route::post('/quiz/{quiz}/submit', [QuizAttemptController::class, 'store'])->name('user.quiz.submit');
     // Route để JS gọi đến khi hoàn thành bài học (video/pdf)
     Route::post('/lessons/{lesson}/complete', [LessonCompletionController::class, 'store'])->name('user.lessons.complete');
+    // Chat
+    Route::get('/chat', [ChatController::class, 'index'])->name('user.chat');
+
+    // API để JS lấy lịch sử tin nhắn
+    Route::get('/chat/messages', [ChatController::class, 'fetchMessages'])->name('user.chat.fetch');
+    // API để JS gửi tin nhắn mới
+    Route::post('/chat/messages', [ChatController::class, 'sendMessage'])->name('user.chat.send');
 });
 
 //

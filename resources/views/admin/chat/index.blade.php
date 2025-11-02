@@ -15,21 +15,21 @@
             </div>
             <div class="conversation-list">
                 @forelse ($conversations as $convo)
-                        <a href="{{ route('admin.chat.index', ['user_id' => $convo->id]) }}" class="conversation-item-link">
-                            <div class="conversation-item @if($activeChatPartner && $activeChatPartner->id == $convo->id) active @endif"
-                                data-id="{{ $convo->id }}">
-                                <img src="https://ui-avatars.com/api/?name={{ urlencode($convo->name) }}&background=random"
-                                    alt="Avatar">
-                                <div class="conversation-details">
-                                    <div class="name">{{ $convo->name }}</div>
-                                    {{-- Phần tin nhắn cuối cùng là một tính năng nâng cao, tạm ẩn đi --}}
-                                    {{-- <p class="last-message">Bấm để xem trò chuyện...</p> --}}
-                                </div>
+                    <a href="{{ route('admin.chat.index', ['user_id' => $convo->id]) }}" class="conversation-item-link">
+                        <div class="conversation-item @if($activeChatPartner && $activeChatPartner->id == $convo->id) active @endif"
+                            data-id="{{ $convo->id }}">
+                            <img src="{{ $convo->avatar ? asset('storage/' . $convo->avatar) : 'https://via.placeholder.com/150' }}"
+                                alt="Avatar">
+                            <div class="conversation-details">
+                                <div class="name">{{ $convo->name }}</div>
+                                {{-- Phần tin nhắn cuối cùng là một tính năng nâng cao, tạm ẩn đi --}}
+                                {{-- <p class="last-message">Bấm để xem trò chuyện...</p> --}}
                             </div>
-                        </a>
+                        </div>
+                    </a>
                 @empty
-                        <p style="text-align:center; padding: 1rem; color: #6c757d;">Chưa có cuộc trò chuyện nào.</p>
-                    @endforelse
+                    <p style="text-align:center; padding: 1rem; color: #6c757d;">Chưa có cuộc trò chuyện nào.</p>
+                @endforelse
             </div>
         </aside>
 
@@ -42,6 +42,7 @@
                     @foreach ($messages as $message)
                         <div class="message {{ $message->sender_id === Auth::id() ? 'admin-message' : 'user-message' }}">
                             <div class="message-bubble">
+                                {{ $message->message }}
                             </div>
                         </div>
                     @endforeach
@@ -62,6 +63,6 @@
     </div>
 @endsection
 
-@push('script')
+@push('scripts')
     <script src="{{ asset('js/admin/admin_chat.js') }}"></script>
 @endpush

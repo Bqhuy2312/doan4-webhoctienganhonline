@@ -3,6 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Học Tiếng Anh Online')</title>
     <!-- Bootstrap trước -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -11,7 +12,7 @@
     @stack('styles')
 </head>
 
-<body>
+<body data-user-id="{{ Auth::id() }}">
 
     <!-- Navbar -->
     <nav class="site-navbar">
@@ -32,7 +33,7 @@
                 @if(Auth::check())
                     <div class="dropdown">
                         <button onclick="toggleDropdown()" class="dropdown-btn">
-                            <img src="{{ Auth::user()->avatar ? asset('storage/' . Auth::user()->avatar) : asset('images/default-profile.png') }}" alt="Ảnh đại diện" class="avatar-image">
+                            <img src="{{ Auth::user()->avatar ? asset('storage/' . Auth::user()->avatar) : asset('images/default-profile.png') }}" alt="Ảnh đại diện" class="avatar-image-layout">
                             {{ Auth::user()->first_name }}
                             <span class="arrow">▼</span>
                         </button>

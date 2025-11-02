@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Admin Dashboard')</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -67,7 +68,7 @@
 
                 <li class="nav-item">
                     <a href="{{ route('admin.chat.index') }}"
-                        class="nav-link {{ request()->routeIs('admin.chat') ? 'active' : '' }}">
+                        class="nav-link {{ request()->routeIs('admin.chat.*') ? 'active' : '' }}">
                         <i class="fa-solid fa-comments"></i>
                         <p>
                             Chat/Hỗ trợ
@@ -143,9 +144,9 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-    @vite(['resources/js/app.js'])
-
     @stack('scripts')
+
+    @vite(['resources/js/app.js'])
 
     @auth('admin')
         <script>
@@ -155,7 +156,7 @@
                 const notiCountEl = document.getElementById('notification-count');
                 const notiListEl = document.getElementById('notification-items');
 
-                window.Echo.private('App.Models.User.' + adminId)
+                Echo.channel('public-notification-channel')
                     .listen('NewNotification', (e) => {
 
                         console.log('Thông báo mới:', e.notification);
@@ -175,9 +176,9 @@
                         newNotiLink.href = e.notification.url;
                         newNotiLink.classList.add('dropdown-item');
                         newNotiLink.innerHTML = `
-                            <i class="fa-solid fa-users mr-2"></i> ${e.notification.message}
-                            <span class="float-right text-muted text-sm">vừa xong</span>
-                        `;
+                                <i class="fa-solid fa-users mr-2"></i> ${e.notification.message}
+                                <span class="float-right text-muted text-sm">vừa xong</span>
+                            `;
 
                         notiListEl.prepend(newNotiLink);
                     });
