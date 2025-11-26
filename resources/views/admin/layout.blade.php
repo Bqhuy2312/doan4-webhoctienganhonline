@@ -148,39 +148,51 @@
 
     @vite(['resources/js/app.js'])
 
-    @auth('admin')
+    @auth 
         <script>
             document.addEventListener('DOMContentLoaded', function () {
+
                 const adminId = document.body.dataset.authUserId;
 
                 const notiCountEl = document.getElementById('notification-count');
                 const notiListEl = document.getElementById('notification-items');
 
+                // Lắng nghe channel dành RIÊNG cho admin đang đăng nhập
                 Echo.channel('public-notification-channel')
-                    .listen('NewNotification', (e) => {
+                    .listen('.NewNotification', (e) => {
 
-                        console.log('Thông báo mới:', e.notification);
+                        const data = e.notification;
 
-                        alert('Thông báo mới: ' + e.notification.message);
+                        console.log('Realtime Notification:', data);
 
-                        notiCountEl.style.display = 'block';
-                        let currentCount = parseInt(notiCountEl.innerText || 0);
-                        notiCountEl.innerText = currentCount + 1;
+                        // Hiển thị badge
+                        notiCountEl.style.display = 'inline-block';
+                        let current = parseInt(notiCountEl.innerText || 0);
+                        notiCountEl.innerText = current + 1;
 
-                        const noNoti = notiListEl.querySelector('.text-muted');
-                        if (noNoti) {
-                            noNoti.remove();
-                        }
+                        // Xóa dòng "Không có thông báo"
+                        const emptyItem = notiListEl.querySelector('.text-muted');
+                        if (emptyItem) emptyItem.remove();
 
-                        const newNotiLink = document.createElement('a');
-                        newNotiLink.href = e.notification.url;
-                        newNotiLink.classList.add('dropdown-item');
-                        newNotiLink.innerHTML = `
-                                <i class="fa-solid fa-users mr-2"></i> ${e.notification.message}
-                                <span class="float-right text-muted text-sm">vừa xong</span>
-                            `;
+                        // Tạo thông báo mới
+                        const newItem = document.createElement('a');
+                        newItem.href = data.url;
+                        newItem.classList.add('dropdown-item');
+                        newItem.innerHTML = `
+                    <i class="fa-solid fa-bell mr-2"></i> ${data.message}
+                    <span class="float-right text-muted text-sm">vừa xong</span>
+                `;
 
-                        notiListEl.prepend(newNotiLink);
+                        notiListEl.prepend(newItem);
+
+                        // Popup thông báo cho đẹp
+                        Toastify({
+                            text: "🔔 " + data.message,
+                            duration: 3000,
+                            gravity: "top",
+                            position: "right",
+                            backgroundColor: "#28a745",
+                        }).showToast();
                     });
             });
         </script>

@@ -251,3 +251,14 @@ body {
     font-weight: bold;
     color: #28a745;
 }
+.sortable-list {
+    list-style: none; padding: 0; margin-top: 1rem;
+}
+.sortable-item {
+    background: #f8f9fa; border: 1px solid #ddd;
+    padding: 0.75rem 1rem; margin-bottom: 0.5rem;
+    border-radius: 6px; cursor: move; /* 'move' cursor */
+}
+.sortable-item.sortable-ghost {
+    background: #e9f2ff; opacity: 0.7;
+}

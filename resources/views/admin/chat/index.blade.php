@@ -18,8 +18,11 @@
                     <a href="{{ route('admin.chat.index', ['user_id' => $convo->id]) }}" class="conversation-item-link">
                         <div class="conversation-item @if($activeChatPartner && $activeChatPartner->id == $convo->id) active @endif"
                             data-id="{{ $convo->id }}">
-                            <img src="{{ $convo->avatar ? asset('storage/' . $convo->avatar) : 'https://via.placeholder.com/150' }}"
-                                alt="Avatar">
+                            @if(Str::startsWith($convo->avatar, 'http'))
+                                <img src="{{ $convo->avatar }}" alt="avatar" class="avatar">
+                            @else
+                                <img src="{{ asset('storage/' . $convo->avatar) }}" alt="avatar" class="avatar">
+                            @endif
                             <div class="conversation-details">
                                 <div class="name">{{ $convo->name }}</div>
                                 {{-- Phần tin nhắn cuối cùng là một tính năng nâng cao, tạm ẩn đi --}}

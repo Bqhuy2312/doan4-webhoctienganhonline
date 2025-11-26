@@ -16,6 +16,7 @@ use App\Http\Controllers\User\MyCoursesController;
 use App\Http\Controllers\User\QuizAttemptController;
 use App\Http\Controllers\User\LessonCompletionController;
 use App\Http\Controllers\User\ChatController;
+use App\Http\Controllers\User\PaymentController;
 
 // ==== ADMIN CONTROLLERS ==== //
 use App\Http\Controllers\Admin\adAuthController;
@@ -32,7 +33,7 @@ use App\Http\Controllers\Admin\ChatController as AdminChatController;
 
 //
 // ========================= AUTH (USER) =========================
-//
+//nmp
 
 // Đăng ký
 Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
@@ -107,6 +108,11 @@ Route::prefix('user')->middleware('auth:web')->group(function () {
     Route::get('/chat/messages', [ChatController::class, 'fetchMessages'])->name('user.chat.fetch');
     // API để JS gửi tin nhắn mới
     Route::post('/chat/messages', [ChatController::class, 'sendMessage'])->name('user.chat.send');
+    
+    // Route gửi yêu cầu thanh toán (User bấm nút Thanh toán)
+    Route::post('/payment/create', [PaymentController::class, 'createPayment'])->name('payment.create');
+    // Route VNPAY gọi về sau khi thanh toán xong
+    Route::get('/payment/return', [PaymentController::class, 'vnpayReturn'])->name('payment.return');
 });
 
 //
@@ -121,7 +127,7 @@ Route::prefix('admin')->group(function () {
 
     Route::middleware('auth:admin')->group(function () {
         // Logout
-        Route::post('/logout', [adAuthController::class, 'logout'])->name('admin.auth.logout');
+        Route::post('/logout', [adAuthController::class, 'adlogout'])->name('admin.auth.logout');
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 
         // Categories

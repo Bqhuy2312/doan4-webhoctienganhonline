@@ -7,7 +7,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Message;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\User;
+use App\Models\Notification;
+use App\Events\NewNotification;
 
 class ChatController extends Controller
 {
@@ -58,6 +59,14 @@ class ChatController extends Controller
         // <-- 2. PHÁT SÓNG SỰ KIỆN CHO ADMIN -->
         // Giống hệt như adChatController
         $message->load('sender');
+        $notification = Notification::create([
+            'user_id' => self::ADMIN_USER_ID,
+            'message' => Auth::user()->name . ' vừa gửi 1 tin nhắn mới.',
+            'url' => route('admin.chat.index'),
+        ]);
+
+        // Phát sự kiện thông báo (chuông thông báo của admin)
+        broadcast(new NewNotification($notification))->toOthers();
         broadcast(new MessageSent($message));
 
         return response()->json($message);

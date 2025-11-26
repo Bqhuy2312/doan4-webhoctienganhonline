@@ -69,21 +69,39 @@
 
                 {{-- Kiểm tra xem user đã đăng ký khóa này chưa --}}
                 @if ($isEnrolled)
+                    {{-- Đã đăng ký -> Vào học --}}
                     <a href="{{ route('user.resume', $course->id) }}" class="enroll-button continue-learning-btn">
                         Tiếp tục học
                     </a>
+
                 @elseif ($isFull)
+                    {{-- Đã hết chỗ -> Nút xám --}}
                     <button type="button" class="enroll-button" disabled style="background-color: #6c757d; cursor: not-allowed;">
                         Đã hết chỗ
                     </button>
+
                 @else
-                    <form action="{{ route('user.enroll', $course->id) }}" method="POST">
-                        @csrf
-                        <button type="submit" class="enroll-button">
-                            Đăng ký khóa học
-                        </button>
-                    </form>
+                    {{-- Chưa đăng ký và còn chỗ --}}
+                    
+                    @if ($course->price > 0)
+                        <form action="{{ route('payment.create') }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="course_id" value="{{ $course->id }}">
+                            <button type="submit" class="enroll-button">
+                                Mua ngay
+                            </button>
+                        </form>
+                    @else
+                        <form action="{{ route('user.enroll', $course->id) }}" method="POST">
+                            @csrf
+                            <button type="submit" class="enroll-button">
+                                Đăng ký miễn phí
+                            </button>
+                        </form>
+                    @endif
+
                 @endif
+                <br>
                 <ul>
                     <li>Danh mục: {{ $course->category->name }}</li>
                     <li>Số lượng bài học: {{ $course->lessons->count() }}</li>

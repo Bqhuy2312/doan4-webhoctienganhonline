@@ -24,6 +24,13 @@ class EnrollmentController extends Controller
             return back()->withErrors(['error' => 'Bạn đã đăng ký khóa học này rồi.']);
         }
 
+        // Kiểm tra xem khóa học CÓ PHÍ hay không
+        // Nếu có phí, không cho phép đăng ký qua route này (phải qua thanh toán)
+        if ($course->price > 0) {
+            return back()->withErrors(['error' => 'Khóa học này có phí. Vui lòng thực hiện thanh toán.']);
+        }
+
+        // Kiểm tra sĩ số
         if ($course->student_limit > 0) {
             $currentEnrollments = $course->enrollments()->count();
             if ($currentEnrollments >= $course->student_limit) {
@@ -31,12 +38,15 @@ class EnrollmentController extends Controller
             }
         }
 
+        // Tạo đăng ký
         Enrollment::create([
             'user_id' => $user->id,
             'course_id' => $course->id,
             'progress' => 0
         ]);
 
+        // Thông báo Admin
+        $this->notifyAdminUserEnrolled($course, $user);
         $this->checkAndNotifyAdminIfCourseIsFull($course);
 
         $firstLesson = $course->lessons()->orderBy('id', 'asc')->first();
@@ -49,27 +59,48 @@ class EnrollmentController extends Controller
 
     private function checkAndNotifyAdminIfCourseIsFull(Course $course)
     {
-        if ($course->student_limit > 0) {
+        if ($course->student_limit <= 0)
+            return;
 
-            $currentEnrollments = $course->enrollments()->count();
+        $currentEnrollments = $course->enrollments()->count();
 
-            if ($currentEnrollments >= $course->student_limit) {
+        if ($currentEnrollments < $course->student_limit)
+            return;
 
-                $admin = User::find(1);
-                $admins = $admin ? [$admin] : [];
-                
-                $message = "Khóa học '{$course->title}' đã đạt sĩ số tối đa ({$currentEnrollments}).";
+        $admins = User::where('role', 'admin')->get();
 
-                foreach ($admins as $admin) {
-                    $notification = Notification::create([
-                        'user_id' => $admin->id,
-                        'message' => $message,
-                        'url' => route('admin.courses.show', $course->id),
-                    ]);
+        foreach ($admins as $admin) {
 
-                    broadcast(new NewNotification($notification))->toOthers();
-                }
-            }
+            $message = "Khóa học '{$course->title}' đã đạt sĩ số tối đa ({$currentEnrollments}).";
+
+            $notification = Notification::create([
+                'user_id' => $admin->id,
+                'message' => $message,
+                'url' => route('admin.courses.show', $course->id),
+                'read_at' => null
+            ]);
+
+            broadcast(new NewNotification($notification));
+        }
+    }
+
+    private function notifyAdminUserEnrolled(Course $course, User $user)
+    {
+        // Danh sách admin
+        $admins = User::where('role', 'admin')->get();
+
+        foreach ($admins as $admin) {
+
+            // Tạo thông báo trong DB
+            $notification = Notification::create([
+                'user_id' => $admin->id,
+                'message' => "{$user->name} đã đăng ký khóa học: {$course->title}",
+                'url' => route('admin.courses.show', $course->id),
+                'read_at' => null
+            ]);
+
+            // Bắn realtime
+            broadcast(new NewNotification($notification));
         }
     }
 }

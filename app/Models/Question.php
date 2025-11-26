@@ -34,7 +34,8 @@ class Question extends Model
 
 	protected $fillable = [
 		'quiz_id',
-		'question_text'
+		'question_text',
+		'type',
 	];
 
 	public function quiz()

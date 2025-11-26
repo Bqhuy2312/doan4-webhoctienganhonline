@@ -33,7 +33,11 @@
                 @if(Auth::check())
                     <div class="dropdown">
                         <button onclick="toggleDropdown()" class="dropdown-btn">
-                            <img src="{{ Auth::user()->avatar ? asset('storage/' . Auth::user()->avatar) : asset('images/default-profile.png') }}" alt="Ảnh đại diện" class="avatar-image-layout">
+                            @if(Str::startsWith(Auth::user()->avatar, 'http'))
+                                <img src="{{ Auth::user()->avatar }}" alt="avatar" class="avatar-image-layout">
+                            @else
+                                <img src="{{ asset('storage/' . Auth::user()->avatar) }}" alt="avatar" class="avatar-image-layout">
+                            @endif
                             {{ Auth::user()->first_name }}
                             <span class="arrow">▼</span>
                         </button>

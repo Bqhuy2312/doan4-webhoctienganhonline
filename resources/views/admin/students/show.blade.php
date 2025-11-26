@@ -15,7 +15,11 @@
     <div class="student-profile-container">
         <aside class="profile-sidebar">
             <div class="profile-card">
-                <img src="{{ $student->avatar_url }}" alt="Avatar" class="avatar">
+                @if(Str::startsWith($student->avatar, 'http'))
+                    <img src="{{ $student->avatar }}" alt="avatar" class="avatar">
+                @else
+                    <img src="{{ asset('storage/' . $student->avatar) }}" alt="avatar" class="avatar">
+                @endif
                 <h2 class="student-name">{{ $student->last_name }}</h2>
                 <p class="student-email">{{ $student->email }}</p>
 

@@ -24,17 +24,28 @@ class adAuthController extends Controller
             $request->session()->regenerate();
             return redirect()->route('admin.dashboard');
         }
-
         return back()->withErrors([
             'email' => 'Thông tin đăng nhập không chính xác hoặc không có quyền truy cập',
         ])->onlyInput('email');
     }
 
-    public function logout(Request $request)
+    public function adlogout(Request $request)
     {
-        Auth::guard('auth:admin')->logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+        // Logout only the web guard so we don't accidentally clear the
+        // entire session when an admin is also logged in (same users table).
+        Auth::guard('admin')->logout();
+
+        // If there's no admin session active, it's safe to invalidate the
+        // whole session (prevents session fixation). If an admin is also
+        // authenticated (same browser), preserve the session to avoid
+        // logging them out; still regenerate the CSRF token.
+        if (!Auth::guard('web')->check()) {
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+        } else {
+            // Preserve session but rotate CSRF token
+            $request->session()->regenerateToken();
+        }
 
         return redirect()->route('admin.login');
     }

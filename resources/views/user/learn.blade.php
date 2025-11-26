@@ -102,15 +102,44 @@
                                                 <strong>Câu {{ $index + 1 }}:</strong> {{ $question->question_text }}
                                             </p>
 
-                                            <ul class="quiz-options">
-                                                @foreach ($question->options as $option)
-                                                    <li class="quiz-option">
-                                                        <input type="radio" name="question[{{ $question->id }}]" value="{{ $option->id }}"
-                                                            id="option-{{ $option->id }}" required>
-                                                        <label for="option-{{ $option->id }}">{{ $option->option_text }}</label>
-                                                    </li>
-                                                @endforeach
-                                            </ul>
+                                            @if ($question->type === 'multiple_choice' || $question->type === 'listening_choice')
+
+                                                {{-- MULTIPLE CHOICE --}}
+                                                <ul class="quiz-options">
+                                                    @foreach ($question->options as $option)
+                                                        <li class="quiz-option">
+                                                            <input type="radio" name="question[{{ $question->id }}]" value="{{ $option->id }}" required>
+                                                            <label>{{ $option->option_text }}</label>
+                                                        </li>
+                                                    @endforeach
+                                                </ul>
+
+                                            @elseif ($question->type === 'fill_in_blank')
+
+                                                {{-- FILL IN BLANK --}}
+                                                <div class="fill-in-blank-container">
+                                                    <input type="text" name="question[{{ $question->id }}]" class="form-control"
+                                                        placeholder="Nhập câu trả lời..." required>
+                                                </div>
+
+                                            @elseif ($question->type === 'ordering')
+
+                                                {{-- ORDERING --}}
+                                                <div class="ordering-container">
+                                                    <p><strong>Hãy kéo thả để sắp xếp lại câu:</strong></p>
+
+                                                    <ul id="sortable-{{ $question->id }}" class="sortable-list">
+                                                        @foreach ($question->options->shuffle() as $option)
+                                                            <li class="sortable-item" data-id="{{ $option->id }}">
+                                                                {{ $option->option_text }}
+                                                            </li>
+                                                        @endforeach
+                                                    </ul>
+
+                                                    <input type="hidden" name="question[{{ $question->id }}]" id="answer-{{ $question->id }}">
+                                                </div>
+
+                                            @endif
                                         </div>
                                     @endforeach
 
@@ -180,6 +209,19 @@
                 @endif
             }
 
+            document.querySelectorAll('.sortable-list').forEach(list => {
+                const questionId = list.id.split('-')[1];
+                const answerInput = document.getElementById(`answer-${questionId}`);
+
+                Sortable.create(list, {
+                    animation: 150,
+                    ghostClass: 'sortable-ghost',
+                    onEnd: function () {
+                        const order = Array.from(list.children).map(item => item.dataset.id);
+                        answerInput.value = order.join(',');
+                    }
+                });
+            });
         });
     </script>
 @endpush

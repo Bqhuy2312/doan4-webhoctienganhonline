@@ -62,7 +62,7 @@ class QuizController extends Controller
         $quizTitle = $request->input('quiz_title');
 
         try {
-            // 1. ĐỌC NỘI DUNG TỪ FILE WORD
+            // ĐỌC NỘI DUNG TỪ FILE WORD
             $phpWord = IOFactory::load($file->getPathname());
             $text = '';
             foreach ($phpWord->getSections() as $section) {
@@ -73,20 +73,38 @@ class QuizController extends Controller
                 }
             }
 
-            // 2. PHÂN TÍCH VĂN BẢN
+            // PHÂN TÍCH VĂN BẢN
             $questionsData = $this->parseQuizText($text);
 
             if (empty($questionsData)) {
                 return back()->withErrors(['error' => 'Không tìm thấy câu hỏi nào hoặc file không đúng định dạng.']);
             }
 
-            // 3. LƯU VÀO CSDL (Sử dụng transaction để đảm bảo an toàn)
+            // LƯU VÀO CSDL (Sử dụng transaction để đảm bảo an toàn)
             DB::transaction(function () use ($quizTitle, $questionsData) {
-                $quiz = $this->quiz->create(['title' => $quizTitle]); // Giả sử bạn đã inject Quiz model
+                $quiz = $this->quiz->create(['title' => $quizTitle]);
 
                 foreach ($questionsData as $qData) {
-                    $question = $quiz->questions()->create(['question_text' => $qData['question']]);
-                    $question->options()->createMany($qData['options']);
+
+                    $question = $quiz->questions()->create([
+                        'question_text' => $qData['question'],
+                        'type' => $qData['type']
+                    ]);
+
+                    // MULTIPLE CHOICE + FILL
+                    if ($qData['type'] !== 'ordering') {
+                        $question->options()->createMany($qData['options']);
+                    }
+
+                    // ORDERING
+                    else {
+                        foreach ($qData['options'] as $opt) {
+                            $question->options()->create([
+                                'option_text' => $opt['option_text'],
+                                'order' => $opt['order']
+                            ]);
+                        }
+                    }
                 }
             });
 
@@ -100,47 +118,117 @@ class QuizController extends Controller
     private function parseQuizText($text)
     {
         $questionsData = [];
-        $currentQuestion = null;
+        $current = null;
 
         $lines = preg_split('/(\r\n|\n)/', trim($text));
 
         foreach ($lines as $line) {
-            $trimmedLine = trim($line);
+            $line = trim($line);
+            if ($line === '')
+                continue;
 
-            if (empty($trimmedLine)) {
+            if (preg_match('/^(\d+)\.\s*(.+)/', $line, $m)) {
+                if ($current !== null) {
+                    $questionsData[] = $current;
+                }
+
+                $current = [
+                    'question' => $m[2],
+                    'type' => 'multiple_choice',
+                    'options' => []
+                ];
                 continue;
             }
 
-            if (preg_match('/^(\d+)\.\s*(.*)/', $trimmedLine, $questionMatches)) {
-                if ($currentQuestion !== null && !empty($currentQuestion['options'])) {
-                    $questionsData[] = $currentQuestion;
+            if (!$current)
+                continue;
+
+            if (preg_match('/^ANSWER:\s*(.*)/i', $line, $m)) {
+                $current['type'] = 'fill_in_blank';
+                $current['options'] = [];
+
+                $answerLine = trim($m[1]);
+
+                // TRƯỜNG HỢP: ANSWER: cat | under | blue
+                if ($answerLine !== '') {
+                    $parts = array_map('trim', explode('|', $answerLine));
+                    $index = 1;
+                    foreach ($parts as $p) {
+                        $current['options'][] = [
+                            'option_text' => $p,
+                            'blank_index' => $index++,
+                            'is_correct' => true,
+                        ];
+                    }
+                } else {
+                    // TRƯỜNG HỢP: ANSWER: xuống dòng
+                    $mode = 'fill';
+                    continue;
                 }
 
-                $currentQuestion = [
-                    'question' => $questionMatches[2],
-                    'options' => [],
-                ];
+                continue;
             }
-            elseif (preg_match('/^(\*?)([A-Z])\.\s*(.*)/', $trimmedLine, $optionMatches)) {
-                if ($currentQuestion !== null) {
-                    $isCorrect = ($optionMatches[1] === '*');
-                    $optionText = $optionMatches[3];
 
-                    $currentQuestion['options'][] = [
-                        'option_text' => $optionText,
-                        'is_correct' => $isCorrect,
+            // NẾU ĐANG Ở MODE FILL, MỖI DÒNG LÀ 1 ĐÁP ÁN
+            if (isset($mode) && $mode === 'fill') {
+                if ($line === '' || preg_match('/^\d+\./', $line)) {
+                    unset($mode);
+                } else {
+                    $current['options'][] = [
+                        'option_text' => trim($line),
+                        'blank_index' => count($current['options']) + 1,
+                        'is_correct' => true
+                    ];
+                    continue;
+                }
+            }
+
+            if (preg_match('/^ORDER:\s*(.+)/i', $line, $m)) {
+                $current['type'] = 'ordering';
+
+                $parts = explode('|', $m[1]);
+                $order = 1;
+
+                foreach ($parts as $p) {
+                    $current['options'][] = [
+                        'option_text' => trim($p),
+                        'order' => $order++
                     ];
                 }
+                continue;
+            }
+
+            if (preg_match('/^(\d+)[\.\)]\s*(.+)/', $line, $m)) {
+                if ($current['type'] !== 'ordering') {
+                    $current['type'] = 'ordering';
+                    $current['options'] = [];
+                }
+
+                $current['options'][] = [
+                    'option_text' => trim($m[2]),
+                    'order' => intval($m[1])
+                ];
+                continue;
+            }
+
+            if (preg_match('/^(\*?)([A-Z])\.\s*(.+)/', $line, $m)) {
+                $isCorrect = $m[1] === '*';
+
+                $current['type'] = 'multiple_choice';
+
+                $current['options'][] = [
+                    'option_text' => trim($m[3]),
+                    'is_correct' => $isCorrect
+                ];
             }
         }
 
-        if ($currentQuestion !== null && !empty($currentQuestion['options'])) {
-            $questionsData[] = $currentQuestion;
+        if ($current !== null) {
+            $questionsData[] = $current;
         }
 
         return $questionsData;
     }
-
     public function update(Request $request, Quiz $quiz)
     {
         $validated = $request->validate([
