@@ -7,7 +7,6 @@
 @endpush
 
 @section('content')
-
     <div class="page-header">
         <h1>Thông tin chi tiết học viên</h1>
     </div>

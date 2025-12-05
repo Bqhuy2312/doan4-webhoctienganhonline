@@ -131,6 +131,11 @@
     word-break: break-word;
 }
 
+.user-message .message-time {
+    right: auto;
+    left: 10px;
+}
+
 .message.user-message {
     align-self: flex-start;
 }

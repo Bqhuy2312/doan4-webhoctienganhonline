@@ -1,4 +1,4 @@
-/* Nền xám nhạt cho cả trang, giúp chat-card nổi bật */
+
 body {
     background-color: #f0f2f5;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -9,7 +9,6 @@ body {
     justify-content: center;
     padding: 2rem;
     height: calc(100vh - 80px);
-    /* 100% chiều cao trừ đi navbar */
     box-sizing: border-box;
 }
 
@@ -58,11 +57,13 @@ body {
 }
 
 .message-bubble {
-    padding: 0.8rem 1.2rem;
+    position: relative;
+    padding: 0.8rem 1.2rem 1.6rem;
     max-width: 75%;
     line-height: 1.5;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
     border-radius: 18px;
+    word-break: break-word;
 }
 
 .message-bubble.sent {
@@ -77,6 +78,20 @@ body {
     color: #333;
     align-self: flex-start;
     border-bottom-left-radius: 4px;
+}
+
+.message-time {
+    position: absolute;
+    bottom: 4px;
+    right: 10px;
+    font-size: 0.72rem;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.message-bubble.received .message-time {
+    color: #6c757d;
+    right: auto;
+    left: 10px;
 }
 
 .chat-input-form {

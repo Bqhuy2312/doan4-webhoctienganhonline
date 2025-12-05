@@ -105,7 +105,7 @@
     margin: 0;
 }
 
-.action-btn.delete-btn{
+.action-btn.delete-btn {
     background-color: transparent;
 }
 
@@ -113,4 +113,62 @@
     border-color: #dc3545;
     background-color: #dc3545;
     color: #fff;
+}
+
+.filter-bar {
+    margin-top: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.filter-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    background: #fff;
+    padding: 1rem 1.2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.filter-form input[type="text"],
+.filter-form input[type="date"] {
+    padding: 0.55rem 0.8rem;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    min-width: 200px;
+    transition: border-color 0.2s ease;
+}
+
+.filter-form input:focus {
+    border-color: #007bff;
+}
+
+.filter-form button {
+    padding: 0.55rem 1rem;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+.filter-form button:hover {
+    background-color: #0056b3;
+}
+
+.filter-form .clear-btn {
+    padding: 0.55rem 1rem;
+    background-color: #e9ecef;
+    color: #495057;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.filter-form .clear-btn:hover {
+    background-color: #ced4da;
 }

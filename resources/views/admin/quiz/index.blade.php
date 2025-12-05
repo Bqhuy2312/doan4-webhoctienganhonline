@@ -51,6 +51,21 @@
             </div>
         </div>
     </div>
+
+    <div class="filter-bar">
+        <form method="GET" action="{{ route('admin.quizzes.index') }}" class="filter-form">
+
+            <input type="text" name="keyword" placeholder="Tìm theo tên Quiz..." value="{{ request('keyword') }}">
+
+            <input type="date" name="from_date" value="{{ request('from_date') }}">
+            <input type="date" name="to_date" value="{{ request('to_date') }}">
+
+            <button type="submit">Lọc</button>
+            <a href="{{ route('admin.quizzes.index') }}" class="clear-btn">Xóa lọc</a>
+
+        </form>
+    </div>
+
     <div class="table-container">
         <table class="quizzes-table">
             <thead>

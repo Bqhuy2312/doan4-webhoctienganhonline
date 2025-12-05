@@ -14,6 +14,25 @@
                 class="fa-solid fa-plus"></i> Thêm khóa học</a>
     </div>
 
+    <div class="filter-bar">
+        <form method="GET" action="{{ route('admin.courses.index') }}" class="filter-form">
+
+            <input type="text" name="keyword" placeholder="Tìm theo tên khóa học..." value="{{ request('keyword') }}">
+
+            <input type="date" name="from_date" value="{{ request('from_date') }}">
+            <input type="date" name="to_date" value="{{ request('to_date') }}">
+
+            <select name="status">
+                <option value="">Tất cả trạng thái</option>
+                <option value="1" {{ request('status') === '1' ? 'selected' : '' }}>Hoạt động</option>
+                <option value="0" {{ request('status') === '0' ? 'selected' : '' }}>Tạm ẩn</option>
+            </select>
+
+            <button type="submit">Lọc</button>
+            <a href="{{ route('admin.courses.index') }}" class="clear-btn">Xóa lọc</a>
+        </form>
+    </div>
+
     <div class="table-container">
         <table class="courses-table">
             <thead>

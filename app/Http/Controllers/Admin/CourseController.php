@@ -10,9 +10,28 @@ use App\Models\Quiz;
 
 class CourseController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $courses = Course::latest()->withCount('students')->paginate(10); 
+        $query = Course::withCount('students');
+
+        if ($request->keyword) {
+            $query->where('title', 'like', '%' . $request->keyword . '%');
+        }
+
+        if ($request->from_date) {
+            $query->whereDate('created_at', '>=', $request->from_date);
+        }
+
+        if ($request->to_date) {
+            $query->whereDate('created_at', '<=', $request->to_date);
+        }
+
+        if ($request->status !== null && $request->status !== '') {
+            $query->where('is_active', $request->status);
+        }
+
+        $courses = $query->latest()->paginate(10)->appends($request->query());
+
         return view('admin.courses.index', compact('courses'));
     }
 
@@ -51,7 +70,7 @@ class CourseController extends Controller
     public function show(Course $course)
     {
         $course->load('sections.lessons');
-        
+
         $quizzes = Quiz::latest()->get();
 
         return view('admin.courses.show', compact('course', 'quizzes'));

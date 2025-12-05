@@ -11,9 +11,9 @@
     <div class="chat-container">
         <aside class="chat-sidebar">
             <div class="sidebar-header">
-                <input type="text" placeholder="Tìm kiếm cuộc trò chuyện...">
+                <input type="text" id="search-input" placeholder="Tìm kiếm cuộc trò chuyện...">
             </div>
-            <div class="conversation-list">
+            <div class="conversation-list" id="conversation-list">
                 @forelse ($conversations as $convo)
                     <a href="{{ route('admin.chat.index', ['user_id' => $convo->id]) }}" class="conversation-item-link">
                         <div class="conversation-item @if($activeChatPartner && $activeChatPartner->id == $convo->id) active @endif"
@@ -25,8 +25,6 @@
                             @endif
                             <div class="conversation-details">
                                 <div class="name">{{ $convo->name }}</div>
-                                {{-- Phần tin nhắn cuối cùng là một tính năng nâng cao, tạm ẩn đi --}}
-                                {{-- <p class="last-message">Bấm để xem trò chuyện...</p> --}}
                             </div>
                         </div>
                     </a>
@@ -43,9 +41,13 @@
                 </header>
                 <div class="chat-messages">
                     @foreach ($messages as $message)
+
                         <div class="message {{ $message->sender_id === Auth::id() ? 'admin-message' : 'user-message' }}">
                             <div class="message-bubble">
                                 {{ $message->message }}
+                                <div class="message-time">
+                                    {{ $message->created_at->format('H:i d/m/Y') }}
+                                </div>
                             </div>
                         </div>
                     @endforeach

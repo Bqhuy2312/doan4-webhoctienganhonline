@@ -41,28 +41,42 @@
             const messageInput = document.getElementById('message-input');
             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-            // Lấy ID của user đang đăng nhập
             const currentUserId = {{ Auth::id() }};
 
-            // Lấy route từ Blade
             const SEND_URL = "{{ route('user.chat.send') }}";
             const FETCH_URL = "{{ route('user.chat.fetch') }}";
 
-            // (Hàm helper 1: Thêm 1 tin nhắn vào UI)
             function appendMessage(msg) {
                 const bubble = document.createElement('div');
                 bubble.classList.add('message-bubble');
-                // Phân biệt tin nhắn Gửi (sent) hay Nhận (received)
+
                 if (msg.sender_id === currentUserId) {
                     bubble.classList.add('sent');
                 } else {
                     bubble.classList.add('received');
                 }
-                bubble.textContent = msg.message;
+
+                const messageText = document.createElement('div');
+                messageText.classList.add('text');
+                messageText.textContent = msg.message;
+
+                const messageTime = document.createElement('div');
+                messageTime.classList.add('time');
+
+                const date = new Date(msg.created_at);
+                const formatted = date.toLocaleTimeString('vi-VN', {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                }) + ' ' + date.toLocaleDateString('vi-VN');
+
+                messageTime.textContent = formatted;
+
+                bubble.appendChild(messageText);
+                bubble.appendChild(messageTime);
+
                 chatMessages.appendChild(bubble);
             }
 
-            // (Hàm helper 2: Hiển thị lịch sử chat)
             function renderMessages(messages) {
                 chatMessages.innerHTML = '';
                 if (messages.length === 0) {
@@ -73,7 +87,6 @@
                 scrollToBottom();
             }
 
-            // (Hàm helper 3: Gửi tin nhắn mới)
             async function sendMessage(messageText) {
                 try {
                     await fetch(SEND_URL, {
@@ -86,8 +99,7 @@
                         body: JSON.stringify({ message: messageText })
                     });
 
-                    // Tự thêm tin nhắn của MÌNH vào UI ngay lập tức
-                    appendMessage({ message: messageText, sender_id: currentUserId });
+                    appendMessage({ message: messageText, sender_id: currentUserId, created_at: new Date().toISOString() });
                     scrollToBottom();
 
                 } catch (error) {
@@ -95,12 +107,10 @@
                 }
             }
 
-            // (Hàm helper 4: Tự động cuộn)
             function scrollToBottom() {
                 chatMessages.scrollTop = chatMessages.scrollHeight;
             }
 
-            // 3. XỬ LÝ GỬI FORM
             chatForm.addEventListener('submit', function (e) {
                 e.preventDefault();
                 const messageText = messageInput.value.trim();
@@ -110,12 +120,10 @@
                 }
             });
 
-            // 4. TẢI LỊCH SỬ CHAT (Khi mở trang)
             fetch(FETCH_URL)
                 .then(response => response.json())
                 .then(messages => renderMessages(messages));
 
-            // 5. LẮNG NGHE PUSHER (Tin nhắn mới từ Admin)
             window.Echo.channel('public-chat-channel')
                 .listen('.MessageSent', (e) => {
 

@@ -16,9 +16,24 @@ class QuizController extends Controller
     {
         $this->quiz = $quiz;
     }
-    public function index()
+    public function index(Request $request)
     {
-        $quizzes = Quiz::latest()->withCount('questions')->paginate(10);
+        $query = Quiz::withCount('questions');
+
+        if ($request->keyword) {
+            $query->where('title', 'like', '%' . $request->keyword . '%');
+        }
+
+        if ($request->from_date) {
+            $query->whereDate('created_at', '>=', $request->from_date);
+        }
+
+        if ($request->to_date) {
+            $query->whereDate('created_at', '<=', $request->to_date);
+        }
+
+        $quizzes = $query->latest()->paginate(10)->appends($request->query());
+
         return view('admin.quiz.index', compact('quizzes'));
     }
 
@@ -42,7 +57,7 @@ class QuizController extends Controller
 
     public function show(Quiz $quiz)
     {
-        $quiz->load('questions.options'); // Tải trước câu hỏi và các lựa chọn
+        $quiz->load('questions.options');
         return view('admin.quiz.question', compact('quiz'));
     }
 
@@ -62,7 +77,6 @@ class QuizController extends Controller
         $quizTitle = $request->input('quiz_title');
 
         try {
-            // ĐỌC NỘI DUNG TỪ FILE WORD
             $phpWord = IOFactory::load($file->getPathname());
             $text = '';
             foreach ($phpWord->getSections() as $section) {
@@ -73,14 +87,12 @@ class QuizController extends Controller
                 }
             }
 
-            // PHÂN TÍCH VĂN BẢN
             $questionsData = $this->parseQuizText($text);
 
             if (empty($questionsData)) {
                 return back()->withErrors(['error' => 'Không tìm thấy câu hỏi nào hoặc file không đúng định dạng.']);
             }
 
-            // LƯU VÀO CSDL (Sử dụng transaction để đảm bảo an toàn)
             DB::transaction(function () use ($quizTitle, $questionsData) {
                 $quiz = $this->quiz->create(['title' => $quizTitle]);
 
@@ -91,13 +103,9 @@ class QuizController extends Controller
                         'type' => $qData['type']
                     ]);
 
-                    // MULTIPLE CHOICE + FILL
                     if ($qData['type'] !== 'ordering') {
                         $question->options()->createMany($qData['options']);
-                    }
-
-                    // ORDERING
-                    else {
+                    } else {
                         foreach ($qData['options'] as $opt) {
                             $question->options()->create([
                                 'option_text' => $opt['option_text'],
@@ -149,7 +157,6 @@ class QuizController extends Controller
 
                 $answerLine = trim($m[1]);
 
-                // TRƯỜNG HỢP: ANSWER: cat | under | blue
                 if ($answerLine !== '') {
                     $parts = array_map('trim', explode('|', $answerLine));
                     $index = 1;
@@ -161,7 +168,6 @@ class QuizController extends Controller
                         ];
                     }
                 } else {
-                    // TRƯỜNG HỢP: ANSWER: xuống dòng
                     $mode = 'fill';
                     continue;
                 }
@@ -169,7 +175,6 @@ class QuizController extends Controller
                 continue;
             }
 
-            // NẾU ĐANG Ở MODE FILL, MỖI DÒNG LÀ 1 ĐÁP ÁN
             if (isset($mode) && $mode === 'fill') {
                 if ($line === '' || preg_match('/^\d+\./', $line)) {
                     unset($mode);
